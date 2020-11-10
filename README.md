@@ -1,9 +1,7 @@
-# AM10_SG11
+# AM10_SG11 GROUP PROJECT PROPOSAL
 Data Visualisation and Story Telling Final Group Project (Study Group 11)
 
-**GROUP PROJECT PROPOSAL**
-
-*Dataset - COVID-19 Mortality Risk, Our World in Data*
+**Dataset - COVID-19 Mortality Risk, Our World in Data**
 
 (data download)
 https://ourworldindata.org/mortality-risk-covid?country=~GBR
@@ -11,7 +9,7 @@ https://ourworldindata.org/mortality-risk-covid?country=~GBR
 (data github repo)
 https://github.com/owid/covid-19-data/tree/master/public/data
 
-*The Worldwide Development of the COVID-19 Pandemic*
+**The Worldwide Development of the COVID-19 Pandemic**
 
 OBJECTIVE 1     Visualise the Spread of the Virus in Terms of Mortality
 Outcomes:       time series + mapping (geospatial visualisation)
