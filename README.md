@@ -1,5 +1,5 @@
 # STUDY GROUP 11, AM10 PROJECT PROPOSAL
-Data Visualisation and Story Telling Final Group Project (Study Group 11)
+*Data Visualisation and Story Telling Final Group Project (Study Group 11)*
 
 **Dataset - COVID-19 Mortality Risk, Our World in Data**
 
