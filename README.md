@@ -33,6 +33,11 @@ Outcomes:       static maps + regional heterogeneity (e.g. showing death/infecti
 *OBJECTIVE 3*     Mortality Outcomes in key regions/geographies (the temporal evolution of the virus)
 Outcomes:       time series with specific national policy events
 
+**Visualisation Ideas / Checklist**
+
+1. Time Series Plot
+2. Parallel Sets Plot
+3. Mapping (static and interactive / dynamic / time series)
 
 
         
