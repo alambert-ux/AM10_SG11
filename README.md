@@ -13,9 +13,14 @@ https://github.com/owid/covid-19-data/tree/master/public/data
 
 *The Worldwide Development of the COVID-19 Pandemic*
 
-1. The Spread of the Virus (in terms of cases and deaths) - time series + mapping (geospatial visualisation)
-2. Geographic Heterogeneity (in terms of cases and deaths) - static maps + regional heterogeneity (e.g. showing death/infection rate by age, across geographies)
-3. Outcomes in key regions/geographies (the temporal evolution of the virus) - time series with specific national policy events
+OBJECTIVE 1     Visualise the Spread of the Virus in Terms of Mortality
+Outcomes:       time series + mapping (geospatial visualisation)
+
+OBJECTIVE 2     Geographic Heterogeneity in the Virus in Terms of Mortality
+Outcomes:       static maps + regional heterogeneity (e.g. showing death/infection rate by age, across geographies)
+
+OBJECTIVE 3     Mortality Outcomes in key regions/geographies (the temporal evolution of the virus)
+Outcomes:       time series with specific national policy events
 
 
 
