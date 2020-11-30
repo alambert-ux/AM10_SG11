@@ -215,3 +215,69 @@ covid_europe <- covid_total %>%
 
 skim(covid_europe)
 ```
+
+# Plot1: Mapping the most recent date(Nov 24 2020) new cases data in Europe
+
+```{r new_cases_1124}
+library(ggplot2)
+library(sf)
+library(rnaturalearth)
+
+# get the world map
+worldmap <- ne_countries(scale = 'medium', type = 'map_units',
+                         returnclass = 'sf')
+# get the euro map
+europe_cropped <- st_crop(worldmap, xmin = -20, xmax = 45,
+                                    ymin = 30, ymax = 73)
+
+# combine map with covid european data at the most recent date: 2020-11-24
+covid_europe_1124 <- covid_europe %>% 
+  filter(date == "2020-11-24")
+
+euro_joined <- left_join(europe_cropped, covid_europe_1124, by = c("name" = "location"))
+
+# mapping the covid data
+euro_joined %>% 
+  ggplot(aes(fill = new_cases, color = new_cases)) +
+  geom_sf() +
+  labs(title = "European new cases on Nov 24 2020") +
+  theme_bw()
+```
+# Plot2: Visualize the trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe
+```{r top 5 sum new_cases countries}
+top_5_country <- covid_europe %>% 
+  group_by(location) %>% 
+  summarise(sum = sum(new_cases)) %>% 
+  arrange(desc(sum)) %>% 
+  top_n(5) %>% 
+  select(location) %>% 
+  pull()
+# Top 5 countries with most cases are France, Russia, Spain, United Kingdom and Italy
+```
+
+```{r redate from 1000 cases}
+# rerank the date by setting the first date as the day first 1000 new cases diagnosed
+covid_europe_1000 <- covid_europe %>% 
+  filter(new_cases >= 1000) %>% 
+  group_by(location) %>% 
+  summarise(date_min = min(date)) %>% 
+  mutate(start_min = as.Date(date_min))
+covid_europe_1000
+
+# join the start date and calculate the date diff to rank the days after first 1000 cases and create a new variable calls date_rnk
+covid_europe_start <- left_join(covid_europe,covid_europe_1000,by = c("location" = "location"))
+covid_europe_start <- covid_europe_start %>% 
+  mutate(date_rnk = as.double(difftime(date,start_min,units = "days"))) %>% 
+  filter(date_rnk >= 0)
+```
+
+```{r plot top 5 countries}
+covid_europe_start_5 <- covid_europe_start %>% 
+  filter(location %in% top_5_country)
+
+covid_europe_start_5 %>% 
+  ggplot(aes(x = date_rnk, y = new_cases, color = location)) +
+  geom_line(size=1.5) +
+  labs(title = "The trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe") +
+  theme_bw()
+```
