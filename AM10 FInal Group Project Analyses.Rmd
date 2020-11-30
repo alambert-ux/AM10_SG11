@@ -12,7 +12,6 @@ output:
     toc_float: yes
     code_folding: show
 ---
----
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(
   message = FALSE, 
@@ -292,6 +291,24 @@ covid_testing$x7_day_smoothed_daily_change[is.na(covid_testing$x7_day_smoothed_d
 ```
 
 
+Check dupes
+```{r}
+
+
+
+#check for duplicates dataset 2
+dupes_testing<-covid_testing%>%get_dupes(date, iso_code)
+covid_testing1 <- covid_testing %>% distinct(date, iso_code, .keep_all = TRUE)
+#test if removing duplicates worked
+dupes_testing2 <- covid_testing1%>%get_dupes(date, iso_code)
+
+covid_testing2 <- covid_testing1 %>% 
+  group_by(date, iso_code) %>% 
+  summarise(cumulative_total_1 = sum(cumulative_total))
+
+```
+
+
 
 ##  Dataset-3 - Hospital Data
 
@@ -326,59 +343,76 @@ Next we remove rows which are not populated in the filed - "values"
 
 hospital_data <- hospital_data %>%
   filter(!is.na(value))
+  
 
 ```
 
 We still have 621 rows with no date. However we have year_week populated for them
 
-
-
-
-
-```{r dataset1 remove duplicates and empties}
-#check for duplicates
-covid_data %>% get_dupes(date, iso_code) # no duplicates :)
-#Remove empty columns and rows
-covid_data_clean <- remove_empty(covid_data, which = c("rows","cols")) # 17 columns and 0 rows removed
-skim(covid_data_clean)
-```
-We start to clean each columns. We can see there are some rows with `location = International`which makes our `iso_code` NA. Since our analysis mainly focus on each countries, we will delete these rows. For the `continent` variable, we found that its NA come from`location = 'World'`, which is actually derivable from other rows, thus we will delete them.
-
-```{r dataset1 clean iso_code and continent}
-# NAs in iso_code
-head(covid_data_clean[is.na(covid_data$iso_code),])
-# delete them
-covid_data_clean <- 
-  covid_data_clean %>% filter(!is.na(iso_code))
-# NAs in continent
-head(covid_data_clean[is.na(covid_data_clean$continent),])
-covid_data_clean <- covid_data_clean %>% 
-  filter(!is.na(continent))
-```
-
-For the `gdp_per_capita` column, there are 28 countries/territories with missing values. And they are missing across all the days. We impute some of them, with data from world bank if it is availble, and leave the rest in NAs
-
-```{r dataset1 clean gdp_per_capita}
-# check if the gdp_per_capita of countries are NA all the time 
-covid_data_clean %>% 
-  filter(is.na(gdp_per_capita)) %>% 
-  group_by(location) %>% 
-  summarise(all_na = all(is.na(gdp_per_capita)))
-
-covid_data_clean[covid_data_clean$location =='Andorra','gdp_per_capita'] = 45887
-covid_data_clean[covid_data_clean$location =='Cuba','gdp_per_capita'] = 6816
-covid_data_clean[covid_data_clean$location =='Faeroe Islands','gdp_per_capita'] = 48530
-covid_data_clean[covid_data_clean$location =='Greenland','gdp_per_capita'] = 49311
-covid_data_clean[covid_data_clean$location =='Guam','gdp_per_capita'] = 31477
-covid_data_clean[covid_data_clean$location =='Isle of Man','gdp_per_capita'] = 90190
-covid_data_clean[covid_data_clean$location =='Liechtenstein','gdp_per_capita'] = 141200
-covid_data_clean[covid_data_clean$location =='Monaco','gdp_per_capita'] = 196061
-covid_data_clean[covid_data_clean$location =='Northern Mariana Islands','gdp_per_capita'] = 18577
-covid_data_clean[covid_data_clean$location =='Turks and Caicos Islands','gdp_per_capita'] = 21028
-covid_data_clean[covid_data_clean$location =='United States Virgin Islands','gdp_per_capita'] = 11069
-```
+Pivot hospital data in order to clean it and then merge with covid_data_clean
 ```{r}
-skim(covid_data_clean)
+
+# hospital_data1 <- hospital_data %>% 
+#   select(-c(source, url, year_week)) %>% #only daily data
+#   pivot_wider( names_from=indicator, values_from=value) %>% 
+#   select(c(1:4)) #deselect weekly indicators
+
+
+hospital_data1 <- hospital_data %>% 
+  pivot_wider( names_from=indicator, values_from=value) %>% 
+  select(c(1, 2, 6, 7 )) %>% 
+  clean_names()
+
+  
+ #deselect weekly indicators
+
+
+dupes_hospital<-hospital_data1%>%get_dupes(date, country) #duplicates resulted from different sources
+
+hospital_data2 <- hospital_data1 %>% 
+  group_by(date, country) %>% 
+  summarise(daily_hospital_occupancy = sum(daily_hospital_occupancy),
+            daily_icu_occupancy = sum(daily_icu_occupancy))
+
+dupes_hospital2<-hospital_data2%>%get_dupes(date, country) #no duplicates
+
+```
+## Merging dataset 1 with dataset3
+
+
+```{r}
+
+#rename columns in dataset 3 in order to join datasets
+
+hospital_data2 <- hospital_data2 %>% 
+  rename( location = country)
+
+#merging datasets
+
+covid_total <- covid_data_clean %>% 
+  left_join(hospital_data2, by= c("location", "date"))
+
+#see what's inside
+
+skim(covid_total)
+
 ```
 
-How to deal with negative values, NAs in cases & deaths...? 
+We observe that there are still quite a few missing values, however we are going to focus on Europe in our analysis.
+
+```{r}
+#filter for European countries
+
+unique(covid_total$continent)
+
+covid_europe <- covid_total %>% 
+  filter(continent == "Europe") %>% 
+  clean_names()
+
+skim(covid_europe)
+
+
+
+
+```
+

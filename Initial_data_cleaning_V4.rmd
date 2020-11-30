@@ -1,5 +1,6 @@
 ---
-title: "Data Visualization and Story Telling: Group Project"
+title: "AM10 SG11 Group Project Analyses"
+output: html_document
 author: "Study Group 11: Alberto Lambert, Sijia Liu, Abhinav Bhardwaj, Bartek Makuch, Anna Plaschke, Feiyang Ni"
 date: "2020-11-15"
 output:
