@@ -31,7 +31,6 @@ knitr::opts_chunk$set(
 
 ```{r, load_libraries, include = FALSE}
 library(readr) #load dataset
-library(vroom)
 library(tidyverse)
 library(lubridate)
 library(janitor)
@@ -68,11 +67,11 @@ library(car)
 library(huxtable)
 library(Hmisc) #describe function
 library(here)
+library(vroom)
 
 ```
 
-
-
+# Load data
 
 ```{r loading_data, include = FALSE}
 #loading first data set, incl. GDP
@@ -95,148 +94,62 @@ hospital_data <- hospital_data_original %>%
   clean_names()
 ```
 
-```{r}
-#display first rows in order to see what's inside
-head(covid_data, 5)
+# Clean data
+## dataset 1: owid-covid-data
 
-head(covid_testing,5)
+We start with the `covid_data`, which has 48 covid-related indicators of a country in a given date. From the `skim` below, we observe:
 
-head(hospital_data,5)
+* 17 completely empty columns 
+* Incompleteness in almost all columns
 
-#more general idea about what is in the data
-#glimpse(covid_data)
-#glimpse(covid_testing)
-
-#get more detailed information
-#describe(covid_data) 
-
-#use skim in order to get summary statistics
+```{r dataset1 skim}
 skim(covid_data)
-skim(covid_testing)
-skim(hospital_data)
-```
-At the beginning, let's list all the columns in the data:
-*   iso_code
-*   etc.
-
-Before joining the two datasets we change the format of the dates and check for duplicates. 
-```{r date_format}
-#change date format of both datasets
-covid_data <- covid_data %>% 
-  mutate(date = ymd(date))
-
-covid_testing <- covid_testing %>% 
-  mutate(date = ymd(date))
-
-hospital_data <- hospital_data %>% 
-  mutate(date = ymd(date))
 ```
 
-```{r pivot_wider_hospital}
-hospital_data1 <- pivot_wider(hospital_data, names_from=indicator, values_from=value)
-```
-
-```{r date_duplicates}
-#check for duplicates dataset 1
-dupes_data<-covid_data%>%get_dupes(date, iso_code)
-
-#check for duplicates dataset 2
-dupes_training<-covid_testing%>%get_dupes(date, iso_code)
-covid_testing1 <- covid_testing %>% distinct(date, iso_code, .keep_all = TRUE)
-#test if removing duplicates worked
-dupes_training1 <- covid_testing1%>%get_dupes(date, iso_code)
-
-#check for duplicates dataset 3
-dupes_hospital<-hospital_data1%>%get_dupes(date, country)
-#here we have some problems with weekly gathered data - we cannot allocate them to a specific data - how should we handle this?
-#Bartek suggestion: let's get rid of this source: TESSy COVID-19
-```
-
-
-```{r rename_hosiptal}
-#change 
-hospital_data1 <- hospital_data1 %>% 
-  rename( location = country)
-```
-
-
-```{r joining_datasets}
-#join datasets
-covid_total <- covid_data %>% left_join(covid_testing1, by=c("iso_code","date")) %>% 
-  left_join(hospital_data1, by= c("location", "date"))
-```
-
-```{r look_at_dataset}
-#display first rows in order to see what's inside
-head(covid_total, 5)
-
-#more general idea about what is in the data
-#glimpse(covid_total)
-
-#get more detailed information
-#describe(covid_total) 
-
-#use skim in order to get summary statistics
-skim(covid_total)
-```
-
-
-# Data Clenaing
-
-## Technically correct data
-
-
-This step is divided into two parts:
-
-1.1. Initial data cleaning !!!CHANGE NUMBERS
-
-    2.1.1 Remove empty columns and rows and duplicates.
-
-    2.1.2 Check how many values are missing and NAs.
-    
-2.2. Data Types and distribution
-
-    2.2.1 Correct data types. 
-
-    2.2.2 Check max, min, and distribution of numerical values.
-
-    2.2.3 Names and distributions of categorical values.
-
-
-Any additional irregularities.
-
-### Initial data cleaning
-
-Before we start looking at the contents of the data we remove empty columns and rows and duplicates. Then, we check how many values are missing and NAs.
-```{r remove_empty_dup}
-#Remove empty columns and rows
-covid_total1<-remove_empty(covid_total, which = c("rows","cols"))
+```{r dataset1 remove duplicates and empties}
 #check for duplicates
-dupes<-covid_total1%>%get_dupes(date, iso_code)
+covid_data %>% get_dupes(date, iso_code) # no duplicates :)
+#Remove empty columns and rows
+covid_data_clean <- remove_empty(covid_data, which = c("rows","cols")) # 17 columns and 0 rows removed
+skim(covid_data_clean)
+```
+We start to clean each columns. We can see there are some rows with `location = International`which makes our `iso_code` NA. Since our analysis mainly focus on each countries, we will delete these rows. For the `continent` variable, we found that its NA come from`location = 'World'`, which is actually derivable from other rows, thus we will delete them.
+
+```{r dataset1 clean iso_code and continent}
+# NAs in iso_code
+head(covid_data_clean[is.na(covid_data$iso_code),])
+# delete them
+covid_data_clean <- 
+  covid_data_clean %>% filter(!is.na(iso_code))
+# NAs in continent
+head(covid_data_clean[is.na(covid_data_clean$continent),])
+covid_data_clean <- covid_data_clean %>% 
+  filter(!is.na(continent))
 ```
 
-Within the two datasets, 17 columns contained no data at all. Therefore, running the function remove_empty() we reduced 62 variables to 45.
-No duplicates, no need to remove them.
+For the `gdp_per_capita` column, there are 28 countries/territories with missing values. And they are missing across all the days. We impute some of them, with data from world bank if it is availble, and leave the rest in NAs
 
-To look at the new combined dataset and to find the number of missing data points we use `skim(data)` function.
-```{r skim_new_dataset}
-skim(covid_total1)
+```{r dataset1 clean gdp_per_capita}
+# check if the gdp_per_capita of countries are NA all the time 
+covid_data_clean %>% 
+  filter(is.na(gdp_per_capita)) %>% 
+  group_by(location) %>% 
+  summarise(all_na = all(is.na(gdp_per_capita)))
+
+covid_data_clean[covid_data_clean$location =='Andorra','gdp_per_capita'] = 45887
+covid_data_clean[covid_data_clean$location =='Cuba','gdp_per_capita'] = 6816
+covid_data_clean[covid_data_clean$location =='Faeroe Islands','gdp_per_capita'] = 48530
+covid_data_clean[covid_data_clean$location =='Greenland','gdp_per_capita'] = 49311
+covid_data_clean[covid_data_clean$location =='Guam','gdp_per_capita'] = 31477
+covid_data_clean[covid_data_clean$location =='Isle of Man','gdp_per_capita'] = 90190
+covid_data_clean[covid_data_clean$location =='Liechtenstein','gdp_per_capita'] = 141200
+covid_data_clean[covid_data_clean$location =='Monaco','gdp_per_capita'] = 196061
+covid_data_clean[covid_data_clean$location =='Northern Mariana Islands','gdp_per_capita'] = 18577
+covid_data_clean[covid_data_clean$location =='Turks and Caicos Islands','gdp_per_capita'] = 21028
+covid_data_clean[covid_data_clean$location =='United States Virgin Islands','gdp_per_capita'] = 11069
 ```
-This datsets contains a hige number of missing values. 
-AT the beginning, we will look at the missing iso codes:
 ```{r}
-covid_total1%>% filter(is.na(iso_code)) %>% 
-  distinct(location)
+skim(covid_data_clean)
 ```
 
-```{r remove_international}
-covid_total2 <- covid_total1%>% filter(!is.na(iso_code))
-
-#check
-covid_total2%>% filter(is.na(iso_code)) 
-```
-```{r}
-covid_total1%>% filter(is.na(continent))
-
-```
-
+How to deal with negative values, NAs in cases & deaths...? 
