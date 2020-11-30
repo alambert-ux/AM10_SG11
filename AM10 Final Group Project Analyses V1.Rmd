@@ -29,6 +29,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+#Load Necessary Libraries
+
 ```{r, load_libraries, include = FALSE}
 library(readr) #load dataset
 library(tidyverse)
@@ -69,9 +71,11 @@ library(Hmisc) #describe function
 library(here)
 library(vroom)
 library(ggthemes)
+library(cluster)
+library(ggtext)
 ```
 
-# Load data
+# Load Data
 
 ```{r loading_data, include = FALSE}
 #loading first data set, incl. GDP
@@ -95,7 +99,8 @@ hospital_data <- hospital_data_original %>%
 ```
 
 # Clean data
-## dataset: owid-covid-data
+
+## Dataset 1: owid-covid-data
 
 We start with the `covid_data`, which has 48 covid-related indicators of a country in a given date. From the `skim` below, we observe:
 
@@ -150,8 +155,7 @@ covid_data_clean[covid_data_clean$location =='United States Virgin Islands','gdp
 
 skim(covid_data_clean)
 ```
-
-##  dataset: hospital data
+##  Dataset 2: Hospital Data
 
 ```{r dataset2 skim}
 skim(hospital_data)
@@ -182,9 +186,10 @@ hospital_data_clean %>% get_dupes(date, country) # no duplicates
 
 ```
 
-## Testing dataset
+## Dataset 3: COVID Testing Dataset
 
-Let's explore covid testing dataset.
+We explore the dataset...
+
 ```{r explore testing}
 skim(covid_testing)
 
@@ -202,11 +207,8 @@ covid_testing_process %>%
   arrange(desc(date)) %>% 
   head(5)
 
-
-
 ```
 As we can observe there are two metrics: people tested and samples tested. Having browsed the source of the dataset we are not able to conclude which data is correct, thus we are going to take daily average for specific dates.
-
 
 ```{r clean testing}
 
@@ -229,21 +231,16 @@ covid_testing_process1 %>%
   arrange(desc(date)) %>% 
   head(5)
 
-
-
-
 ```
 
-
-## Merging datasets
-
+## Merging the 3 Datasets into 1
 
 ```{r merge dataset}
 
 #rename columns in hospital dataset in order to join datasets
 
 hospital_data_clean <- hospital_data_clean %>% 
-  rename( location = country)
+  rename(location = country)
 
 #merging datasets
 
@@ -270,16 +267,17 @@ covid_europe <- covid_total %>%
 
 skim(covid_europe)
 ```
-## Enrich dataset
+## Enriching dataset
 
-We are going to enrich the dataset by following variables:  
--day0_cases -> date when daily cases first hit 1000  
--day0_deaths -> date when daily deaths first hit 100  
--day0_cases_elapsed -> days elapsed from day_0_cases  
--day0_deaths_elapsed -> days elapsed from day_0_deaths  
--day0_difference -> days elapsed between daily cases first hit 1000 and daily deaths 100
+We are going to enrich the dataset by defining the following variables:  
 
-```{r enrich dataset}
+- day0_cases -> date when daily cases first hit 1000  
+- day0_deaths -> date when daily deaths first hit 100  
+- day0_cases_elapsed -> days elapsed from day_0_cases  
+- day0_deaths_elapsed -> days elapsed from day_0_deaths  
+- day0_difference -> days elapsed between daily cases first hit 1000 and daily deaths 100
+
+```{r enriching the dataset}
 
 ##days elapsed since daily cases exceeded 1000 for the first time
 
@@ -304,7 +302,6 @@ covid_europe_process <- covid_europe %>%
   ))
 
 ##days elapsed since daily deaths exceeded 100 for the first time
-
 
 #find the date zero
 calc_day0 <- covid_europe %>% 
@@ -335,32 +332,29 @@ calc_day0 <- covid_europe_process2 %>%
   group_by(location) %>% 
   summarise(day0_difference = min(as.numeric(day0_deaths - day0_cases))) #use min in order to get only 1 result per country
 
-
 #merge all data
-
 
 covid_europe_process3 <- covid_europe_process2 %>% 
   left_join(calc_day0, by = "location")
 
 covid_europe <- covid_europe_process3
 
-
 #clean temporary objects
 
 rm(calc_day0,covid_europe_process, covid_europe_process2, covid_europe_process3)
 ```
 
-
-
-
-
-
 Adjustments made in the following two plots:
-1. I changed the date to most recent instead of nov 24 2020 to avoid NAs, because some countries may have yet reported their cases in that day
-2. Changed the color scale, using  https://gka.github.io/palettes/#/9|s|ffffe0,920000|ffffe0,ff005e,93003a|1|1
-3. Added some country names on the map. if we show all of them that would be too busy. we can adjust the name of countries we want to show by changing the `country_list`
 
-## Plot1: Mapping the most recent date (not neccesarily Nov 24 2020) new cases data in Europe
+1. We changed the date to most recent instead of Nov 24 2020 to avoid NAs, because some countries may not have yet reported their cases in that day
+2. We changed the color scale, using  https://gka.github.io/palettes/#/9|s|ffffe0,920000|ffffe0,ff005e,93003a|1|1
+3. We added some country names on the map. If we show all of them that would be too busy. We can adjust the names of the countries we want to show by changing the `country_list`
+
+#Building Visualisations to Tell Our Story
+
+We begin by setting the scene of the 'state of COVID=19' in Europe, before exploring the relationship between government measures and deaths/cases, and delving into 4 distinct country case studies to understand how specific public policy decisions have translated into COVID-19 outcomes. Finally, we build a predictive model to propose an optimal stringency level for a country facing a certain number of cases, of a certain size, and so on. We conclude that those countries who have successfully contained the virus have adopted a strategy of X, Y, and Z and experienced X, Y, Z outcomes, versus those who have exercised less coordinated and sustained approaches. 
+
+## Plot 1: Mapping the most recent date (not neccesarily Nov 24 2020) new cases data in Europe
 
 ```{r new_cases_1124}
 library(ggplot2)
@@ -394,7 +388,9 @@ euro_joined %>%
                        labels = c(0,'5K','10K','15K','20K','25K')) +
   theme_fivethirtyeight() + theme(legend.position = "right", legend.direction = 'vertical')
 ```
-## Plot 1.2 Most recent total cases
+
+## Plot 2: Mapping the most recent date (not neccesarily Nov 24 2020) total cases
+
 ```{r}
 my_scale <- c('#fee5d9','#fcbba1','#fc9272','#fb6a4a','#ef3b2c','#cb181d','#99000d')
 # mapping the covid data
@@ -410,7 +406,8 @@ euro_joined %>%
   theme_fivethirtyeight() + theme(legend.position = 'right', legend.direction = 'vertical')
 ```
 
-## Plot2: Visualize the trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe
+## Plot 3: Visualizing the trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe
+
 ```{r top 5 sum new_cases countries}
 top_5_country <- covid_europe %>% 
   group_by(location) %>% 
@@ -448,6 +445,56 @@ covid_europe_start_5 %>%
   labs(title = "The trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe") +
   theme_bw()
 ```
+
+## Plot 4: Investigating the relationship between stringency measures and cases/deaths for prominent European countries
+```{r}
+
+#(1) New Cases Smoothed, Per Million
+
+coeff=10
+
+covid_europe %>% 
+  group_by(location) %>% 
+  filter(location %in% c("Denmark","Finland","France","Germany","Greece","Iceland","Italy","Netherlands","Norway","Poland","Slovakia","Slovenia","Spain","Sweden","Switzerland","United Kingdom")) %>% 
+  
+  ggplot(aes(x=date))+
+  facet_wrap(~location)+
+  geom_line(aes(y=new_cases_smoothed_per_million),colour="blue")+
+  geom_line(aes(y=stringency_index*coeff), colour="red")+
+  scale_y_continuous(name = "Smoothed New COVID-19 Cases Per Million",
+    # Add a second axis and specify its features
+    sec.axis = sec_axis( trans=~./coeff, name="Stringency Index")
+  )+
+  theme_fivethirtyeight()+
+  theme(axis.title = element_text())+
+  labs(title="Too Little Too Late? European Countries' Measures Suggest Overconfidence Before Major Resurgences of COVID-19", subtitle="Relationship between New Daily COVID-19 Cases and National Stringency Index",x="Date")+
+  theme(legend.title=element_blank()) +
+  theme(legend.position="top") 
+
+# (2) New Deaths Smoothed, Per Million
+
+covid_europe %>% 
+  group_by(location) %>% 
+  filter(location %in% c("Denmark","Finland","France","Germany","Greece","Iceland","Italy","Netherlands","Norway","Poland","Slovakia","Slovenia","Spain","Sweden","Switzerland","United Kingdom")) %>% 
+  
+  ggplot(aes(x=date))+
+  facet_wrap(~location)+
+  geom_line(aes(y=new_deaths_smoothed_per_million),colour="blue")+
+  geom_line(aes(y=stringency_index/coeff), colour="red")+
+  scale_y_continuous(name = "Smoothed New COVID-19 Deaths Per Million",
+    # Add a second axis and specify its features
+    sec.axis = sec_axis( trans=~.*coeff, name="Stringency Index")
+  )+
+  theme_fivethirtyeight()+
+  theme(axis.title = element_text())+
+  labs(title="Early Bird Catches the Worm | Countries with Strict, Rapid and Sustained Stringency Measures Culled COVID-19 Deaths", subtitle="Relationship between New Daily COVID-19 Deaths and National Stringency Index",x="Date")+
+  theme(legend.title=element_blank()) +
+  theme(legend.position="top") 
+
+```
+
+## Plot 5.1: (UK) Visualizing the trend of cases and tests alongside key policy events 
+
 ```{r UK CHART}
   
 UK_1wave <- covid_europe %>% 
@@ -509,7 +556,7 @@ UK_1wave /UK_2wave + plot_annotation(
   subtitle = 'And some not...', #adding a separate line for clarity
   caption = 'Source:https://owid.data')
 ```
-
+## Plot 5.2: (Poland) Visualizing the trend of cases and tests alongside key policy events 
 
 ```{r POLAND CHART}
 
@@ -571,6 +618,8 @@ patchwork + plot_annotation(
   caption = 'Source:https://owid.data',)
 ```
 
+## Plot 5.3: (Italy) Visualizing the trend of cases and tests alongside key policy events 
+
 ```{r}
 covid_europe %>% 
   filter(location == 'Italy') %>% 
@@ -580,6 +629,8 @@ covid_europe %>%
   labs(title = 'ITALY') +
   scale_x_date(labels = date_format("%m-%Y"))
 ```
+## Plot 5.4: (Sweden) Visualizing the trend of cases and tests alongside key policy events 
+
 ```{r}
 covid_europe %>% 
   filter(location == 'Sweden') %>% 
@@ -589,3 +640,15 @@ covid_europe %>%
   labs(title = 'SWEDEN') +
   scale_x_date(labels = date_format("%m-%Y"))
 ```
+
+# PLOT 6 - RUNNING A STATISTICAL MODEL EVALUATING THE RELATIONSHIP BETWEEN STRINGENCY AND CASES/DEATHS IN ORDER TO PROPOSE THE OPTIMAL STRINGENCY MEASURE FOR A GIVEN COUNTRY AT A GIVEN TIME (THE PRESENT DAY / THE MOST RECENT DAY)
+
+```{r}
+
+
+
+
+
+
+```
+
