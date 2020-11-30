@@ -181,6 +181,59 @@ hospital_data_clean %>% get_dupes(date, country) # no duplicates
 
 ```
 
+## Testing dataset
+
+Let's explore covid testing dataset.
+```{r explore testing}
+skim(covid_testing)
+
+# we can drop a few variables such as source_url, source_label and note
+
+covid_testing_process <- covid_testing %>% 
+  select(-c(source_url, source_label, notes))
+         
+skim(covid_testing_process)
+
+#show a couple of entries for specific country
+
+covid_testing_process %>% 
+  filter(iso_code == "POL") %>% 
+  arrange(desc(date)) %>% 
+  head(5)
+
+
+
+```
+As we can observe there are two metrics: people tested and samples tested. Having browsed the source of the dataset we are not able to conclude which data is correct, thus we are going to take daily average for specific dates.
+
+
+```{r clean testing}
+
+#average daily data per country and omit na's
+
+covid_testing_process1 <-covid_testing_process %>% 
+  group_by(date, iso_code) %>% 
+  summarise(cumulative_tests = mean(cumulative_total, na.rm = TRUE),
+            daily_tests = mean(daily_change_in_cumulative_total, na.rm = TRUE),
+            cumulative_tests_per_thousand = mean(cumulative_total_per_thousand, na.rm = TRUE),
+            x7_day_daily_test_change = mean(x7_day_smoothed_daily_change, na.rm = TRUE),
+            x7_day_daily_test_change_per_thousand = mean(x7_day_smoothed_daily_change_per_thousand, na.rm = TRUE),
+            short_term_tests_per_case = mean(short_term_tests_per_case, na.rm = TRUE),
+            short_term_positive_rate = mean(short_term_positive_rate, na.rm = TRUE))
+
+#check the results
+
+covid_testing_process1 %>% 
+  filter(iso_code == "USA") %>% 
+  arrange(desc(date)) %>% 
+  head(5)
+
+
+
+
+```
+
+
 ## Merging datasets
 
 
@@ -194,7 +247,8 @@ hospital_data_clean <- hospital_data_clean %>%
 #merging datasets
 
 covid_total <- covid_data_clean %>% 
-  left_join(hospital_data_clean, by= c("location", "date"))
+  left_join(hospital_data_clean, by= c("location", "date")) %>% 
+  left_join(covid_testing_process1, by = c("date", "iso_code"))
 
 #see what's inside
 
@@ -215,13 +269,102 @@ covid_europe <- covid_total %>%
 
 skim(covid_europe)
 ```
+## Enrich dataset
+
+We are going to enrich the dataset by following variables:  
+-day0_cases -> date when daily cases first hit 1000  
+-day0_deaths -> date when daily deaths first hit 100  
+-day0_cases_elapsed -> days elapsed from day_0_cases  
+-day0_deaths_elapsed -> days elapsed from day_0_deaths  
+-day0_difference -> days elapsed between daily cases first hit 1000 and daily deaths 100
+
+```{r enrich dataset}
+
+##days elapsed since daily cases exceeded 1000 for the first time
+
+#find the date zero
+calc_day0 <- covid_europe %>% 
+  filter(new_cases >= 1000) %>% 
+  group_by(location) %>% 
+  summarise(day0_cases = min(date))
+
+#merge data with zero date
+covid_europe_process <- covid_europe %>% 
+  left_join(calc_day0, by = "location") %>% 
+
+#add metric counting days from day 0
+
+  mutate(day0_cases_elapsed = as.numeric(date - day0_cases)) %>% 
+  
+  #assign NA for negative days
+  mutate(day0_cases_elapsed = case_when(
+    day0_cases_elapsed < 0 ~ NA_real_,
+    TRUE ~ day0_cases_elapsed
+  ))
+
+##days elapsed since daily deaths exceeded 100 for the first time
+
+
+#find the date zero
+calc_day0 <- covid_europe %>% 
+  filter(new_deaths >= 100) %>% 
+  group_by(location) %>% 
+  summarise(day0_deaths = min(date))
+
+#merge data with zero date
+covid_europe_process2 <- covid_europe_process %>% 
+  left_join(calc_day0, by = "location") %>% 
+
+#add metric counting days from day 0
+
+  mutate(day0_deaths_elapsed = as.numeric(date - day0_deaths)) %>% 
+  
+  #assign NA for negative days
+  mutate(day0_deaths_elapsed = case_when(
+    day0_deaths_elapsed < 0 ~ NA_real_,
+    TRUE ~ day0_deaths_elapsed
+  ))
+
+##days elapsed between daily cases hit 1000 and daily deaths hit 100
+
+#use threshold for daily deaths (some countries exceeded 1000 daily cases, but not 100 dail deaths)
+
+calc_day0 <- covid_europe_process2 %>% 
+  filter(new_deaths >= 100) %>% 
+  group_by(location) %>% 
+  summarise(day0_difference = min(as.numeric(day0_deaths - day0_cases))) #use min in order to get only 1 result per country
+
+
+#merge all data
+
+
+covid_europe_process3 <- covid_europe_process2 %>% 
+  left_join(calc_day0, by = "location")
+
+covid_europe <- covid_europe_process3
+
+
+#clean temporary objects
+
+rm(calc_day0,covid_europe_process, covid_europe_process2, covid_europe_process3)
+
+
+
+
+
+```
+
+
+
+
+
 
 Adjustments made in the following two plots:
 1. I changed the date to most recent instead of nov 24 2020 to avoid NAs, because some countries may have yet reported their cases in that day
 2. Changed the color scale, using  https://gka.github.io/palettes/#/9|s|ffffe0,920000|ffffe0,ff005e,93003a|1|1
 3. Added some country names on the map. if we show all of them that would be too busy. we can adjust the name of countries we want to show by changing the `country_list`
 
-# Plot1: Mapping the most recent date (not neccesarily Nov 24 2020) new cases data in Europe
+## Plot1: Mapping the most recent date (not neccesarily Nov 24 2020) new cases data in Europe
 
 ```{r new_cases_1124}
 library(ggplot2)
@@ -254,7 +397,7 @@ euro_joined %>%
                        labels = c(0,'5K','10K','15K','20K','25K')) +
   theme_bw() 
 ```
-# Plot 1.2 Most recent total cases
+## Plot 1.2 Most recent total cases
 ```{r}
 my_scale <- c('#fee5d9','#fcbba1','#fc9272','#fb6a4a','#ef3b2c','#cb181d','#99000d')
 worldmap <- ne_countries(scale = 'medium', type = 'map_units', continent = 'europe',
@@ -280,7 +423,7 @@ euro_joined %>%
   theme_bw()
 ```
 
-# Plot2: Visualize the trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe
+## Plot2: Visualize the trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe
 ```{r top 5 sum new_cases countries}
 top_5_country <- covid_europe %>% 
   group_by(location) %>% 
@@ -318,4 +461,6 @@ covid_europe_start_5 %>%
   labs(title = "The trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe") +
   theme_bw()
 ```
+
+
 
