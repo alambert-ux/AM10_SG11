@@ -73,8 +73,6 @@ library(vroom)
 library(ggthemes)
 library(cluster)
 library(ggtext)
-library(varImp)
-library(earth)
 library(caret)
 
 ```
@@ -850,11 +848,11 @@ control <- trainControl (
 #we are going to train the model and report the results using k-fold cross validation
 model1_lm<-train(
     total_cases_per_million~aged_65_older+
-            stringency_index:days_elapsed+stringency_index+
+            stringency_index:days_elapsed+stringency_index +
            stringency_index:location
            , data = covid_europe_lm,
    method = "lm",
-    trControl = control,na.action=na.exclude
+    trControl = control, na.action=na.exclude
    )
 
 # summary of the results
@@ -867,49 +865,8 @@ summary(model1_lm)
 ```{r LR Model Variable Importance}
 
 # we can check variable importance as well
-importance <- varImp(model1_lm, scale=TRUE)
+importance <- caret::varImp(model1_lm, scale=TRUE)
 plot(importance)
 
 ```
-
-
-
-
-
-
-
-```{r}
-
-# total cases as y
-lm1 <- lm(total_cases_per_million~aged_65_older+
-            stringency_index:days_elapsed+stringency_index+
-           stringency_index:location
-           , data = covid_europe_lm)
-
-summary(lm1)
-
-```
-
-```{r}
-
-library(jtools)
-
-plot_summs(lm1,inner_ci_level = .9,
-           coefs = c('aged_65_older','stringency_index','stringency_index:days_elapsed',
-                     'stringency_index:locationUnited Kingdom','stringency_index:locationGreece',
-                     'stringency_index:locationSweden','stringency_index:locationItaly',
-                     'stringency_index:locationPoland'))
-
-```
-
-```{r}
-
-# we can check variable importance as well
-importance <- varImp(lm1, scale=TRUE)
-plot(importance)
-
-```
-
-
-
 
