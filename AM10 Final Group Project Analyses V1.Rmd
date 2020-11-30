@@ -73,6 +73,10 @@ library(vroom)
 library(ggthemes)
 library(cluster)
 library(ggtext)
+library(varImp)
+library(earth)
+library(caret)
+
 ```
 
 # Load Data
@@ -451,7 +455,7 @@ covid_europe_start_5 %>%
 
 #(1) New Cases Smoothed, Per Million
 
-coeff=10
+coeff=7.5
 
 covid_europe %>% 
   group_by(location) %>% 
@@ -488,6 +492,29 @@ covid_europe %>%
   theme_fivethirtyeight()+
   theme(axis.title = element_text())+
   labs(title="Early Bird Catches the Worm | Countries with Strict, Rapid and Sustained Stringency Measures Culled COVID-19 Deaths", subtitle="Relationship between New Daily COVID-19 Deaths and National Stringency Index",x="Date")+
+  theme(legend.title=element_blank()) +
+  theme(legend.position="top") 
+
+
+#(3) New Cases Smoothed, Per Million - For Days Since Surpassing 1000 Cases
+
+coeff=10
+
+covid_europe_start %>% 
+  group_by(location) %>% 
+  filter(location %in% c("Denmark","Finland","France","Germany","Greece","Iceland","Italy","Netherlands","Norway","Poland","Slovakia","Slovenia","Spain","Sweden","Switzerland","United Kingdom")) %>% 
+  
+  ggplot(aes(x=date_rnk))+
+  facet_wrap(~location)+
+  geom_line(aes(y=new_cases_smoothed_per_million),colour="blue")+
+  geom_line(aes(y=stringency_index*coeff), colour="red")+
+  scale_y_continuous(name = "Smoothed New COVID-19 Cases Per Million",
+    # Add a second axis and specify its features
+    sec.axis = sec_axis( trans=~./coeff, name="Stringency Index")
+  )+
+  theme_fivethirtyeight()+
+  theme(axis.title = element_text())+
+  labs(title="XXX", subtitle="Relationship between Smoothed New COVID-19 Cases Since Surpassing 1000 Cases and National Stringency Index",x="Days Since Reporting 1000 Cases")+
   theme(legend.title=element_blank()) +
   theme(legend.position="top") 
 
@@ -620,35 +647,269 @@ patchwork + plot_annotation(
 
 ## Plot 5.3: (Italy) Visualizing the trend of cases and tests alongside key policy events 
 
-```{r}
-covid_europe %>% 
-  filter(location == 'Italy') %>% 
-  ggplot(aes(date, new_cases_smoothed, group = 1)) +
-  geom_line() +
+
+```{r ITALY_CHART, fig.width=15, fig.height=10}
+IT_1wave <- covid_europe %>% 
+  # to create first wave, we filter the month
+  filter(location == 'Italy' & month(date)<9 & month(date)>1) %>% 
+  ggplot() +
+  # create tiles for the first lockdown Zona rossa milano
+  geom_rect(aes(xmin = as.Date('2020-02-21'), xmax = as.Date('2020-03-08'), 
+                ymin = -Inf, ymax=Inf), fill = 'grey90') +
+  # create tiles for the first lockdown Zona rossa nord total
+   geom_rect(aes(xmin = as.Date('2020-03-08'), xmax = as.Date('2020-04-03'), 
+                ymin = -Inf, ymax=Inf), fill = 'grey70') +
+  
+  # first lockdown reference line: Zona Rossa Milano
+  geom_vline(xintercept = as.Date('2020-02-21'), color = 'darkgrey', linetype = 'dashed') +
+  # first lockdown end reference line Zona rossa nord total
+  geom_vline(xintercept = as.Date('2020-03-08'), color = 'darkgrey', linetype = 'dashed') +
+  # first lockdown end reference line
+  geom_vline(xintercept = as.Date('2020-04-03'), color = 'darkgrey', linetype = 'dashed') +
+  
+  # add annotate
+  annotate(geom="text", x = as.Date('2020-02-28'),y = 9000, label='Lodi &\nPadua', color = 'black') +
+  annotate(geom="text", x = as.Date('2020-03-22'),y = 9000, label='North\nItaly', color = 'black')+
+  annotate(geom="text", x = as.Date('2020-03-10'),y = 10000, label='Lockdown', face= "bold", color = 'black')+
+  
+  # new cases left axis line
+  geom_line(aes(x = date, y = new_cases_smoothed, group = 1,color = 'Cases')) +
+  
+  # tests right axis line
+  # we devide y by 8 s.t it doesn't distort the graph
+  geom_line( aes(x = date,y = x7_day_daily_test_change/8, colour = "Tests")) +
+  
+  # scale y axis, change right axis back to original values
+  scale_y_continuous(name = 'Daily Cases',labels = scales::comma,sec.axis = sec_axis(~.*8, name = "Daily Tests",labels = scales::comma)) +
+  
   theme_classic() +
-  labs(title = 'ITALY') +
-  scale_x_date(labels = date_format("%m-%Y"))
+   theme(legend.position = "top") +
+  
+  labs(subtitle = 'Italy first wave', colour="") +
+  scale_x_date(labels = date_format("%m-%Y"), date_breaks = "month") 
+
+
+IT_1wave
+
+
+IT_2wave  <- covid_europe %>% 
+  filter(location == 'Italy' & month(date)>=9) %>% 
+  ggplot() +
+  # Second lockdown
+  # create tiles for second lockdown Zona rossa/arancione/gialla
+   geom_rect(aes(xmin = as.Date('2020-11-03'), xmax = as.Date('2020-11-20'), 
+                ymin = -Inf, ymax=Inf), fill = 'grey70') +
+    # second lockdown reference line
+ 
+  geom_vline(xintercept = as.Date('2020-11-03'), color = 'darkgrey', linetype = 'dashed') +
+  annotate(geom="text", x = as.Date('2020-11-12'),y = 40000, label='Second Lockdown\nfor selected regions', color = 'black') +
+  
+  
+  geom_line(aes(x = date, y = new_cases_smoothed, group = 1,color = 'Cases')) +
+  geom_line( aes(x = date,y = x7_day_daily_test_change/8, colour = "Tests")) +
+  scale_y_continuous(name = 'Daily Cases',labels = scales::comma,sec.axis = sec_axis(~.*8, name = "Daily Tests",labels = scales::comma)) +
+  theme_classic() +
+  theme(legend.position = "none") +
+  labs(subtitle = 'Italy second wave',x = '', colour="") +
+  scale_x_date(labels = date_format("%m-%Y"), date_breaks = "month", 
+               limits = c(as.Date('2020-09-01'),as.Date('2020-11-24'))) 
+
+IT_2wave
+IT_1wave /IT_2wave + plot_annotation(
+  title = 'Some countries had it under control',
+  subtitle = 'And some not...', #adding a separate line for clarity
+  caption = 'Source:https://owid.data')
 ```
+
+### Italy
+
+First Lockdown
+
+- Initial local lockdown in ten municipalities of the province of Lodi in Lombardy and one in the province of Padua in Veneto from 21.02.2020.
+-	People under complete lockdown: 50,000 people
+-	Measures: 
+    Very strict: People were only allowed to leave their homes to buy supplies such as food and medicine, no train service was provided, no movement allowed, police cars blocked roads into and out of the quarantined area and erected barriers
+     
+Expansion to northern provinces
+-	Lockdown expanded to most of northern Italy from 8.03 – 3.04
+-	People under lockdown: over sixteen million people
+-	Measures: depending on region different
+    - no traveling from, to or within the affected areas,
+    - no funerals and cultural events
+    - min. distance of 1 metre from one another in public locations
+    - but allowed: trains and planes to and from the region for "proven work needs, emergencies, or health reasons
+    - Restaurants and cafes were permitted to open, between 6:00 and 18:00, while many other public locations such as gyms, nightclubs, museums and swimming pools were closed altogether
+    -	"smart working processes" to permit their employees to work from home
+    - allowance to impose fines or up to three months' jail for people caught leaving or entering the affected zone without permission. 
+
+
+Second Lockdown: @ALBERTO ##HOW IN DEBTH SHOULD I GO REGARDING RESTRICTIONS??? 
+- Italy is divided into different areas with different restrictions
+    - red area
+          - Abruzzo, Campania, Provincia autonoma di Bolzano, Toscana, Valle d'Aosta
+          - very strict: restaurants, bars closed, people can move max 1 km from home
+    - orange area
+          - Basilicata, Calabria, Emilia Romagna, Friuli Venezia Giulia, Lombardia, Marche, Piemonte, Puglia, Umbria
+          - restaurants: take-away, restaurants for hotelguest open
+    
+    - yellow area
+          - Lazio, Liguria, Molise, Provincia autonoma di Trento, Sardegna, Sicilia, Veneto
+          - restaurant etc. open from 5 to 18, bars closed
+          - people can move freely from 5am to 10 pm
+
 ## Plot 5.4: (Sweden) Visualizing the trend of cases and tests alongside key policy events 
 
-```{r}
-covid_europe %>% 
-  filter(location == 'Sweden') %>% 
-  ggplot(aes(date, new_cases_smoothed, group = 1)) +
-  geom_line() +
+```{r SWEDEN CHART}
+
+sweden_1wave <- covid_europe %>% 
+  filter((location == 'Sweden') & (month(date) < 9)) %>% 
+  ggplot(aes(x = date)) +
+  
+    #lockdown and first easing
+  #geom_rect(aes(xmin = as.Date('2020-03-16'), xmax = as.Date('2020-06-13'), 
+  #              ymin = -Inf, ymax=Inf), fill = 'grey90') +
+  geom_line( aes(y = new_cases_smoothed, colour = "Daily Cases")) +
+  geom_line( aes(y = x7_day_daily_test_change/20, colour = "Daily Tests")) + #divide daily tests by 10 in order not to distort graph
+  scale_y_continuous(labels = scales::comma ,sec.axis = sec_axis(~.*20, name = "Daily Tests", labels = scales::comma)) + #multiply secondary axis by 10 in order to show actual results
+  labs(title = 'Sweden') +
+  scale_x_date(labels = date_format("%m-%Y"), date_breaks = "month") +
+
+  
+  #lockdown line
+  geom_vline(xintercept = as.Date('2020-03-16'), color = 'darkgrey', linetype = 'dashed')+ 
+  annotate(geom="text", x = as.Date('2020-04-16'),y = 1000,label='Domestic Travel\nBan',size=3.5)+
+  
+  #ease of lockdown
+  geom_vline(xintercept = as.Date('2020-06-13'), color = 'darkgrey', linetype = 'dashed')+ #add dashed line
+ 
+  
   theme_classic() +
-  labs(title = 'SWEDEN') +
-  scale_x_date(labels = date_format("%m-%Y"))
+  labs(y = "Daily Cases")
+
+
+sweden_2wave <- covid_europe %>% 
+  filter(location == 'Sweden' & month(date) > 8 & year(date)> 2019) %>% 
+  ggplot(aes(x = date)) +
+
+  geom_line( aes(y = new_cases_smoothed, colour = "Daily Cases")) +
+  geom_line( aes(y = x7_day_daily_test_change/2, colour = "Daily Tests")) + #divide daily tests by 2 in order not to distort graph
+  scale_y_continuous(labels = scales::comma ,sec.axis = sec_axis(~.*2, name = "Daily Tests", labels = scales::comma)) + #multiply secondary axis by 2 in order to show actual results
+  labs(title = 'Sweden') +
+  scale_x_date(labels = date_format("%m-%Y"), date_breaks = "month") +
+
+  
+  #new restrictions
+  geom_vline(xintercept = as.Date('2020-10-09'), color = 'darkgrey', linetype = 'dashed')+ #add dashed line
+  annotate(geom="text", x = as.Date('2020-10-16'),y = 25000,label='\nNew\nRestrictions', size = 3.5) +
+  
+  
+  #2nd lockdown
+  #geom_vline(xintercept = as.Date('2020-10-24'), color = 'red')+ 
+  #annotate(geom="text", x = as.Date('2020-10-30'),y = 25000,label='Second\nLockdown', size = 3.5) +
+  
+  theme_classic() +
+  labs(y = "Daily Cases")
+
+#using patchwork to depict 2 maps
+
+patchwork <- sweden_1wave / sweden_2wave
+
+#adding title and caption
+patchwork + plot_annotation(
+  title = 'Sweden with no Lockdowns yet',
+  subtitle = 'And some not...', #adding a separate line for clarity
+  caption = 'Source:https://owid.data',)
 ```
 
 # PLOT 6 - RUNNING A STATISTICAL MODEL EVALUATING THE RELATIONSHIP BETWEEN STRINGENCY AND CASES/DEATHS IN ORDER TO PROPOSE THE OPTIMAL STRINGENCY MEASURE FOR A GIVEN COUNTRY AT A GIVEN TIME (THE PRESENT DAY / THE MOST RECENT DAY)
 
+```{r defining variables}
+
+# create variables: days elapsed since day0
+country_day0 <- 
+  covid_europe %>% 
+  group_by(location) %>% 
+  mutate(my_rank = order(date, decreasing = FALSE)) %>% 
+  filter(my_rank == 1) %>% 
+  select(c(location,date))
+
+covid_europe_lm <- covid_europe %>% 
+  left_join(country_day0,'location') %>% 
+  mutate(days_elapsed = as.numeric(date.x-date.y))
+
+```
+
 ```{r}
 
+#Define control variables
+control <- trainControl (
+    method="cv",
+    number=5,
+    verboseIter=TRUE) #by setting this to true the model will report its progress after each estimation
 
+#we are going to train the model and report the results using k-fold cross validation
+model1_lm<-train(
+    total_cases_per_million~aged_65_older+
+            stringency_index:days_elapsed+stringency_index+
+           stringency_index:location
+           , data = covid_europe_lm,
+   method = "lm",
+    trControl = control,na.action=na.exclude
+   )
 
+# summary of the results
+summary(model1_lm)
 
 
 
 ```
+
+```{r LR Model Variable Importance}
+
+# we can check variable importance as well
+importance <- varImp(model1_lm, scale=TRUE)
+plot(importance)
+
+```
+
+
+
+
+
+
+
+```{r}
+
+# total cases as y
+lm1 <- lm(total_cases_per_million~aged_65_older+
+            stringency_index:days_elapsed+stringency_index+
+           stringency_index:location
+           , data = covid_europe_lm)
+
+summary(lm1)
+
+```
+
+```{r}
+
+library(jtools)
+
+plot_summs(lm1,inner_ci_level = .9,
+           coefs = c('aged_65_older','stringency_index','stringency_index:days_elapsed',
+                     'stringency_index:locationUnited Kingdom','stringency_index:locationGreece',
+                     'stringency_index:locationSweden','stringency_index:locationItaly',
+                     'stringency_index:locationPoland'))
+
+```
+
+```{r}
+
+# we can check variable importance as well
+importance <- varImp(lm1, scale=TRUE)
+plot(importance)
+
+```
+
+
+
 
