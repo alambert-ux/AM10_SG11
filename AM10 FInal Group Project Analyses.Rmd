@@ -347,11 +347,6 @@ covid_europe <- covid_europe_process3
 #clean temporary objects
 
 rm(calc_day0,covid_europe_process, covid_europe_process2, covid_europe_process3)
-
-
-
-
-
 ```
 
 
@@ -371,7 +366,7 @@ library(ggplot2)
 library(sf)
 library(rnaturalearth)
 my_scale <- c('#feedde','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#8c2d04')
-country_list = list('Germany','Russia','Finland','Poland','italy','Sweden')
+country_list = list('Sweden','Russia','Finland','Poland','Italy','Sweden', 'England')
 # get the world map
 worldmap <- ne_countries(scale = 'medium', type = 'map_units', continent = 'europe',
                          returnclass = 'sf')
@@ -385,13 +380,13 @@ covid_europe_lateset <- covid_europe %>%
   mutate(my_rank = order(date, decreasing = TRUE)) %>% 
   filter(my_rank == 1)
 
-euro_joined <- left_join(europe_cropped, covid_europe_lateset, by = c("name" = "location"))
+euro_joined <- left_join(europe_cropped, covid_europe_lateset, by = c("admin" = "location"))
 
 # mapping the covid data
 euro_joined %>% 
   ggplot() +
   geom_sf(aes(fill = new_cases)) +
-  geom_sf_text(data = euro_joined[euro_joined$admin %in% country_list,], aes(label = admin),size = 3) +
+  geom_sf_text(data = euro_joined[euro_joined$subunit %in% country_list,], aes(label = admin),size = 3) +
   labs(title = "Most Recent New Cases in Europe",x='',y='') +
   scale_fill_gradientn(name = NULL,colours = my_scale,
                        labels = c(0,'5K','10K','15K','20K','25K')) +
@@ -411,12 +406,12 @@ covid_europe_lateset <- covid_europe %>%
   filter(my_rank == 1)
 
 
-euro_joined <- left_join(europe_cropped, covid_europe_lateset, by = c("name" = "location"))
+euro_joined <- left_join(europe_cropped, covid_europe_lateset, by = c("admin" = "location"))
 # mapping the covid data
 euro_joined %>% 
   ggplot() +
   geom_sf(aes(fill = total_cases)) +
-  geom_sf_text(data = euro_joined[euro_joined$admin %in% country_list,], aes(label = admin),size = 3) +
+  geom_sf_text(data = euro_joined[euro_joined$subunit %in% country_list,], aes(label = admin),size = 3) +
   labs(title = "Most Recent Total Cases in Europe", x='',y='') +
   scale_fill_gradientn(name = NULL,colours = my_scale,
                        labels = c(0,'0.5M','1M','1.5M','2M')) +
@@ -461,6 +456,41 @@ covid_europe_start_5 %>%
   labs(title = "The trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe") +
   theme_bw()
 ```
+```{r UK CHART}
+covid_europe %>% 
+  filter(location == 'United Kingdom') %>% 
+  ggplot(aes(date, new_cases_smoothed, group = 1)) +
+  geom_line() +
+  theme_classic() +
+  labs(title = 'UK') +
+  scale_x_date(labels = date_format("%m-%Y"))
+```
 
+```{r POLAND CHART}
+covid_europe %>% 
+  filter(location == 'Poland') %>% 
+  ggplot(aes(date, new_cases_smoothed, group = 1)) +
+  geom_line() +
+  theme_classic() +
+  labs(title = 'POLAND') +
+  scale_x_date(labels = date_format("%m-%Y"))
+```
 
-
+```{r}
+covid_europe %>% 
+  filter(location == 'Italy') %>% 
+  ggplot(aes(date, new_cases_smoothed, group = 1)) +
+  geom_line() +
+  theme_classic() +
+  labs(title = 'ITALY') +
+  scale_x_date(labels = date_format("%m-%Y"))
+```
+```{r}
+covid_europe %>% 
+  filter(location == 'Sweden') %>% 
+  ggplot(aes(date, new_cases_smoothed, group = 1)) +
+  geom_line() +
+  theme_classic() +
+  labs(title = 'SWEDEN') +
+  scale_x_date(labels = date_format("%m-%Y"))
+```
