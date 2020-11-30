@@ -1,0 +1,242 @@
+---
+title: "AM10 SG11 Group Project Analyses"
+output: html_document
+author: "Study Group 11: Alberto Lambert, Sijia Liu, Abhinav Bhardwaj, Bartek Makuch, Anna Plaschke, Feiyang Ni"
+date: "2020-11-15"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=8, 
+  fig.height=5,
+  fig.align = "left"
+)
+```
+
+```{r, load_libraries, include = FALSE}
+library(readr) #load dataset
+library(vroom)
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(skimr)
+library(sf)
+library(ggmap)
+library(ggrepel)
+library(gridExtra)
+library(pander)
+library(here)
+library(leaflet)
+library(tmap)
+library(tmaptools)
+library(hrbrthemes)
+library(patchwork)
+library(kableExtra)
+library(scales)
+library(here)
+library(janitor)
+library(broom)
+library(tidyquant)
+library(infer)
+library(openintro)
+library(knitr)
+library(patchwork)
+library(scales)
+library(tidytext)
+library(plotly)
+library(corrplot)
+library(leaflet)
+library(rsample) 
+library(ggfortify)
+library(car)
+library(huxtable)
+library(Hmisc) #describe function
+library(here)
+
+```
+
+
+
+
+```{r loading_data, include = FALSE}
+#loading first data set, incl. GDP
+owid_covid_data <- read_csv(here::here("owid-covid-data.csv")) 
+#cleaning the names
+covid_data <- owid_covid_data %>% 
+  clean_names()
+
+#loading second data set: testing data
+covid_testing_all_observations <- read_csv(here::here("covid-testing-all-observations.csv"))
+#cleaning the names
+covid_testing<- covid_testing_all_observations %>% 
+  clean_names()
+
+#loading third data set: number of hospitalized patients
+
+hospital_data_original <- vroom(here::here("data.csv")) 
+#cleaning the names
+hospital_data <- hospital_data_original %>% 
+  clean_names()
+```
+
+```{r}
+#display first rows in order to see what's inside
+head(covid_data, 5)
+
+head(covid_testing,5)
+
+head(hospital_data,5)
+
+#more general idea about what is in the data
+#glimpse(covid_data)
+#glimpse(covid_testing)
+
+#get more detailed information
+#describe(covid_data) 
+
+#use skim in order to get summary statistics
+skim(covid_data)
+skim(covid_testing)
+skim(hospital_data)
+```
+At the beginning, let's list all the columns in the data:
+*   iso_code
+*   etc.
+
+Before joining the two datasets we change the format of the dates and check for duplicates. 
+```{r date_format}
+#change date format of both datasets
+covid_data <- covid_data %>% 
+  mutate(date = ymd(date))
+
+covid_testing <- covid_testing %>% 
+  mutate(date = ymd(date))
+
+hospital_data <- hospital_data %>% 
+  mutate(date = ymd(date))
+```
+
+```{r pivot_wider_hospital}
+hospital_data1 <- pivot_wider(hospital_data, names_from=indicator, values_from=value)
+```
+
+```{r date_duplicates}
+#check for duplicates dataset 1
+dupes_data<-covid_data%>%get_dupes(date, iso_code)
+
+#check for duplicates dataset 2
+dupes_training<-covid_testing%>%get_dupes(date, iso_code)
+covid_testing1 <- covid_testing %>% distinct(date, iso_code, .keep_all = TRUE)
+#test if removing duplicates worked
+dupes_training1 <- covid_testing1%>%get_dupes(date, iso_code)
+
+#check for duplicates dataset 3
+dupes_hospital<-hospital_data1%>%get_dupes(date, country)
+#here we have some problems with weekly gathered data - we cannot allocate them to a specific data - how should we handle this?
+#Bartek suggestion: let's get rid of this source: TESSy COVID-19
+```
+
+
+```{r rename_hosiptal}
+#change 
+hospital_data1 <- hospital_data1 %>% 
+  rename( location = country)
+```
+
+
+```{r joining_datasets}
+#join datasets
+covid_total <- covid_data %>% left_join(covid_testing1, by=c("iso_code","date")) %>% 
+  left_join(hospital_data1, by= c("location", "date"))
+```
+
+```{r look_at_dataset}
+#display first rows in order to see what's inside
+head(covid_total, 5)
+
+#more general idea about what is in the data
+#glimpse(covid_total)
+
+#get more detailed information
+#describe(covid_total) 
+
+#use skim in order to get summary statistics
+skim(covid_total)
+```
+
+
+# Data Clenaing
+
+## Technically correct data
+
+
+This step is divided into two parts:
+
+1.1. Initial data cleaning !!!CHANGE NUMBERS
+
+    2.1.1 Remove empty columns and rows and duplicates.
+
+    2.1.2 Check how many values are missing and NAs.
+    
+2.2. Data Types and distribution
+
+    2.2.1 Correct data types. 
+
+    2.2.2 Check max, min, and distribution of numerical values.
+
+    2.2.3 Names and distributions of categorical values.
+
+
+Any additional irregularities.
+
+### Initial data cleaning
+
+Before we start looking at the contents of the data we remove empty columns and rows and duplicates. Then, we check how many values are missing and NAs.
+```{r remove_empty_dup}
+#Remove empty columns and rows
+covid_total1<-remove_empty(covid_total, which = c("rows","cols"))
+#check for duplicates
+dupes<-covid_total1%>%get_dupes(date, iso_code)
+```
+
+Within the two datasets, 17 columns contained no data at all. Therefore, running the function remove_empty() we reduced 62 variables to 45.
+No duplicates, no need to remove them.
+
+To look at the new combined dataset and to find the number of missing data points we use `skim(data)` function.
+```{r skim_new_dataset}
+skim(covid_total1)
+```
+This datsets contains a hige number of missing values. 
+AT the beginning, we will look at the missing iso codes:
+```{r}
+covid_total1%>% filter(is.na(iso_code)) %>% 
+  distinct(location)
+```
+
+```{r remove_international}
+covid_total2 <- covid_total1%>% filter(!is.na(iso_code))
+
+#check
+covid_total2%>% filter(is.na(iso_code)) 
+```
+```{r}
+covid_total1%>% filter(is.na(continent))
+
+```
+
