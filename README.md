@@ -26,33 +26,32 @@ https://covid.ourworldindata.org/data/owid-covid-data.csv
 hospital data-> data  
 https://www.ecdc.europa.eu/en/publications-data/download-data-hospital-and-icu-admission-rates-and-current-occupancy-covid-19
 
-testing data -> covid-testing-all-observations
+testing data -> covid-testing-all-observations  
 https://github.com/owid/covid-19-data/blob/master/public/data/testing/covid-testing-all-observations.csv
 
 the last one you need to open. then right click and choose save as csv
 
 ### Evaluating European Governments' COVID-19 Response Strategies
 
-**OBJECTIVE 1** **Plots 1 & 2** Visualise the Current State of the COVID-19 Pandemic in Europe
+**OBJECTIVE 1** **Plots 1 & 2** Visualise the Current State of the COVID-19 Pandemic in Europe  
 
-*Outcomes:*                     Two Spatial Maps, Demonstrating Current Normalised Cases and Deaths Across Europe
-*Insights:*                     An understanding of how different European regions have experienced the crisis differently, allowing selection of key cases
+*Outcomes:*                     Two Spatial Maps, Demonstrating Current Normalised Cases and Deaths Across Europe  
+*Insights:*                     An understanding of how different European regions have experienced the crisis differently, allowing selection of key cases  
 
-**OBJECTIVE 2** **Plot 3**      Compare How Key European Countries Have Experienced the Pandemic in Terms of Cases and Deaths, and the Measures they Have Taken
+**OBJECTIVE 2** **Plot 3**      Compare How Key European Countries Have Experienced the Pandemic in Terms of Cases and Deaths, and the Measures they Have Taken  
 
-*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Stringency of Government Measures and subsequent cases/deaths
-*Insights:*                     Identification of countries where response strategies did & did not **i) Function as Expected**, and selection of interesting cases
+*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Stringency of Government Measures and subsequent cases/deaths  
+*Insights:*                     Identification of countries where response strategies did & did not **i) Function as Expected**, and selection of interesting cases  
+**OBJECTIVE 3** **Plot 4**      Deep-Dive into Specific, Characteristically Distinct Government Responses to the Pandemic   
 
-**OBJECTIVE 3** **Plot 4**      Deep-Dive into Specific, Characteristically Distinct Government Responses to the Pandemic 
+*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3  
+*Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing  
 
-*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3
-*Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing
+**OBJECTIVE 4** **Plot 5**      Understand the empirical relationship between certain factors and COVID-19 cases to make prescriptive recommendations  
 
-**OBJECTIVE 4** **Plot 5**      Understand the empirical relationship between certain factors and COVID-19 cases to make prescriptive recommendations
-
-*Outcomes:*                     Ordinary Least Squares (OLS) Linear Regression Model Which Provides Both Factor Coefficient Estimates and Ranks Factor Importance 
-*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating:
-                                **iii) which factors are most important in determining success of mitigation strategies** and 
+*Outcomes:*                     Ordinary Least Squares (OLS) Linear Regression Model Which Provides Both Factor Coefficient Estimates and Ranks Factor Importance   
+*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating:  
+                                **iii) which factors are most important in determining success of mitigation strategies** and  
                                 **iv) how the predicted efficacy of mitigation strategies vary between countries**
                                 
                            
