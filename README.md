@@ -7,7 +7,13 @@ This study asks the exploratory question "What have European governments done to
 
 Employing a breadth of visual and statistical techniques, including spatial mapping, time-series analysis, and linear regression, we compare the success of European governments in containing the fall-out from the global COVID-19 pandemic. 
 
-Specifically, we draw conclusions such as: i) which countries' strategies functioned as expected; ii) for a set of distinct cases, what mitigation strategies seem most effective in combatting the virus; and, most fascinatingly, iii) how, though the efficacy of certain measures is highly domain-specific, stringent, hard and fast measures almost exclusively predict how well national governments handled the crisis.
+Specifically, we seek to provide answers to the questions: 
+
+i.      Where COVID-19 response strategies functioned as expected?;
+ii.	What mitigation strategies have been most effective at combatting the virus?; and
+iii.	Which factors are most important in determining the success of mitigation strategies and how does this vary between countries?
+
+We conclude that, though the efficacy of certain measures is highly domain-specific, stringent, hard and fast measures almost exclusively predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future. 
 
 ## Datasets
 
@@ -24,22 +30,28 @@ https://github.com/owid/covid-19-data/blob/master/public/data/testing/covid-test
 
 the last one you need to open. then right click and choose save as csv
 
-**The Worldwide Development of the COVID-19 Pandemic**
+# Evaluating European Governments' COVID-19 Response Strategies
 
-*OBJECTIVE 1*     Visualise the Spread of the Virus in Terms of Mortality
-Outcomes:       time series + mapping (geospatial visualisation)
+**OBJECTIVE 1** **Plots 1 & 2** Visualise the Current State of the COVID-19 Pandemic in Europe
 
-*OBJECTIVE 2*     Geographic Heterogeneity in the Virus in Terms of Mortality
-Outcomes:       static maps + regional heterogeneity (e.g. showing death/infection rate by age, across geographies)
+*Outcomes:*                     Two Spatial Maps, Demonstrating Current Normalised Cases and Deaths Across Europe
+*Insights:*                     An understanding of how different European regions have experienced the crisis differently, allowing selection of key cases
 
-*OBJECTIVE 3*     Mortality Outcomes in key regions/geographies (the temporal evolution of the virus)
-Outcomes:       time series with specific national policy events
+**OBJECTIVE 2** **Plot 3**      Compare How Key European Countries Have Experienced the Pandemic in Terms of Cases and Deaths, and the Measures they Have Taken
 
-**Visualisation Ideas / Checklist**
+*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Stringency of Government Measures and subsequent cases/deaths
+*Insights:*                     Identification of countries where response strategies did & did not **i) Function as Expected**, and selection of interesting cases
 
-1. Time Series Plot
-2. Parallel Sets Plot
-3. Mapping (static and interactive / dynamic / time series)
+**OBJECTIVE 3** **Plot 4**      Deep-Dives into Specific, Characteristically Distinct Government Responses to the Pandemic 
+
+*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3
+*Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing
+
+**OBJECTIVE 4** **Plot 5**      Deep-Dives into Specific, Characteristically Distinct Government Responses to the Pandemic 
+
+*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3
+*Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing
 
 
-        
+## Conclusions
+
