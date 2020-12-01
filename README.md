@@ -1,7 +1,7 @@
 # "No Need to Panic, It's All Under Control..." 
 ## A Visual Critique of European Government's COVID-19 Response Strategies
 
-*Data Visualisation and Story Telling Final Group Project (Study Group 11)*
+**Data Visualisation and Story Telling Final Group Project (Study Group 11)**
 
 This study asks the exploratory question "What have European governments done to mitigate the spread of COVID-19?", before asking the more pressing follow-up: "How successful have these measures been at limiting cases and fatalities, and what be learned from both the greatest successes and failures?". 
 
