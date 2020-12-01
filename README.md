@@ -20,10 +20,10 @@ We conclude that, though the efficacy of certain measures is highly domain-speci
 
 *We employ 3 datasets in our analyses, each of which we cleaned individually, before combining them into a single data frame filtered only to European cases, covid_europe*
 
-Big dataset -> owid-covid-data
+Big dataset -> owid-covid-data   
 https://covid.ourworldindata.org/data/owid-covid-data.csv
 
-hospital data-> data
+hospital data-> data  
 https://www.ecdc.europa.eu/en/publications-data/download-data-hospital-and-icu-admission-rates-and-current-occupancy-covid-19
 
 testing data -> covid-testing-all-observations
