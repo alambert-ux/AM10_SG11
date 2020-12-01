@@ -1,7 +1,11 @@
-# STUDY GROUP 11, AM10 PROJECT PROPOSAL
+# "Don't Panic, It's All Under Control..." - A Visual Critique of European Government's COVID-19 Response Strategies
 *Data Visualisation and Story Telling Final Group Project (Study Group 11)*
 
-**Dataset - COVID-19 Mortality Risk, Our World in Data**
+This study asks the exploratory question "What have European governments done to mitigate the spread of COVID-19?", before asking the more pressing follow-up: "How successful have these measures been at limiting cases and fatalities, and what be learned from both the greatest successes and failures?"
+
+Employing a breadth of visual and statistical techniques, including spatial mapping, time-series analysis, and linear regression, we compare the success of European governments in containing the fall-out from the global COVID-19 pandemic, and draw conclusions including i) which countries' strategies functioned as expected; ii) for a set of distinct cases, what mitigation strategies seem most effective in combatting the virus; and, most fascinatingly, iii) how, though the efficacy of certain measures is highly domain-specific, stringent, hard and fast measures almost exclusively predict how well national governments handled the crisis.
+
+## Datasets
 
 *We employ 3 datasets in our analyses, each of which we cleaned individually, before combining them into a single data frame filtered only to European cases, covid_europe*
 
