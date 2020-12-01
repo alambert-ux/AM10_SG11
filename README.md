@@ -55,9 +55,6 @@ the last one you need to open. then right click and choose save as csv
 **OBJECTIVE 4** **Plot 5**      Understand the empirical relationship between certain factors and COVID-19 cases to make prescriptive recommendations  
 
 *Outcomes:*                     Ordinary Least Squares (OLS) Linear Regression Model Which Provides Both Factor Coefficient Estimates and Ranks Factor Importance   
-*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating:   
-
-                                **iii) which factors are most important in determining success of mitigation strategies** 
-                                **iv) how the predicted efficacy of mitigation strategies vary between countries**
+*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating: **iii) which factors are most                                         important in determining success of mitigation strategies** and **iv) how the predicted efficacy of mitigation strategies vary                                        between countries**
                                 
                            
