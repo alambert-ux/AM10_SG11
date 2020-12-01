@@ -11,11 +11,11 @@ Specifically, we seek to provide answers to the questions:
 
 **i.      Where COVID-19 response strategies functioned as expected?;**  
 
-**ii.	    What mitigation strategies have been most effective at combatting the virus?;  **
+**ii.	    What mitigation strategies have been most effective at combatting the virus?;**
 
-**iii.	  Which factors are most important in determining the success of mitigation strategies and;   **
+**iii.	  Which factors are most important in determining the success of mitigation strategies and;**   
 
-**iv.     How does the predicted efficacy of mitigation strategies vary between countries?  **  
+**iv.     How does the predicted efficacy of mitigation strategies vary between countries?**     
 
 We conclude that, though the efficacy of certain measures is highly domain-specific, stringent, hard and fast measures almost exclusively predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future.   
 
@@ -55,8 +55,9 @@ the last one you need to open. then right click and choose save as csv
 **OBJECTIVE 4** **Plot 5**      Understand the empirical relationship between certain factors and COVID-19 cases to make prescriptive recommendations  
 
 *Outcomes:*                     Ordinary Least Squares (OLS) Linear Regression Model Which Provides Both Factor Coefficient Estimates and Ranks Factor Importance   
-*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating:  
-                                **iii) which factors are most important in determining success of mitigation strategies** and  
+*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating:   
+
+                                **iii) which factors are most important in determining success of mitigation strategies** 
                                 **iv) how the predicted efficacy of mitigation strategies vary between countries**
                                 
                            
