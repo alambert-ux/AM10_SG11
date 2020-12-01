@@ -408,7 +408,7 @@ euro_joined %>%
   theme_fivethirtyeight() + theme(legend.position = 'right', legend.direction = 'vertical')
 ```
 
-## Plot 3: Visualizing the trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe
+## General Analysis: Visualizing the trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe
 
 ```{r top 5 sum new_cases countries}
 top_5_country <- covid_europe %>% 
@@ -441,14 +441,14 @@ covid_europe_start <- covid_europe_start %>%
 covid_europe_start_5 <- covid_europe_start %>% 
   filter(location %in% top_5_country)
 
-covid_europe_start_5 %>% 
-  ggplot(aes(x = date_rnk, y = new_cases_smoothed, color = location)) +
-  geom_line(size=0.5) +
-  labs(title = "The trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe") +
-  theme_bw()
+#covid_europe_start_5 %>% 
+  #ggplot(aes(x = date_rnk, y = new_cases_smoothed, color = location)) +
+  #geom_line(size=0.5) +
+  #labs(title = "The trend of new cases after the first day new case number exceed 1000 in the top 5 countries with most cases in Europe") +
+  #theme_bw()
 ```
 
-## Plot 4: Investigating the relationship between stringency measures and cases/deaths for prominent European countries
+## Plot 3: Investigating the relationship between stringency measures and cases/deaths for prominent European countries
 ```{r}
 
 #(1) New Cases Smoothed, Per Million
@@ -518,7 +518,7 @@ covid_europe_start %>%
 
 ```
 
-## Plot 5.1: (UK) Visualizing the trend of cases and tests alongside key policy events 
+## Plot 4.1: (UK) Visualizing the trend of cases and tests alongside key policy events 
 
 ```{r UK CHART}
   
@@ -581,7 +581,7 @@ UK_1wave /UK_2wave + plot_annotation(
   subtitle = 'And some not...', #adding a separate line for clarity
   caption = 'Source:https://owid.data')
 ```
-## Plot 5.2: (Poland) Visualizing the trend of cases and tests alongside key policy events 
+## Plot 4.2: (Poland) Visualizing the trend of cases and tests alongside key policy events 
 
 ```{r POLAND CHART}
 
@@ -643,7 +643,7 @@ patchwork + plot_annotation(
   caption = 'Source:https://owid.data',)
 ```
 
-## Plot 5.3: (Italy) Visualizing the trend of cases and tests alongside key policy events 
+## Plot 4.3: (Italy) Visualizing the trend of cases and tests alongside key policy events 
 
 
 ```{r ITALY_CHART, fig.width=15, fig.height=10}
@@ -755,7 +755,7 @@ Second Lockdown: @ALBERTO ##HOW IN DEBTH SHOULD I GO REGARDING RESTRICTIONS???
           - restaurant etc. open from 5 to 18, bars closed
           - people can move freely from 5am to 10 pm
 
-## Plot 5.4: (Sweden) Visualizing the trend of cases and tests alongside key policy events 
+## Plot 4.4: (Sweden) Visualizing the trend of cases and tests alongside key policy events 
 
 ```{r SWEDEN CHART}
 
@@ -819,7 +819,7 @@ patchwork + plot_annotation(
   caption = 'Source:https://owid.data',)
 ```
 
-# PLOT 6 - RUNNING A STATISTICAL MODEL EVALUATING THE RELATIONSHIP BETWEEN STRINGENCY AND CASES/DEATHS IN ORDER TO PROPOSE THE OPTIMAL STRINGENCY MEASURE FOR A GIVEN COUNTRY AT A GIVEN TIME (THE PRESENT DAY / THE MOST RECENT DAY)
+# Plot 5 - RUNNING A STATISTICAL MODEL EVALUATING THE RELATIONSHIP BETWEEN STRINGENCY AND CASES/DEATHS IN ORDER TO PROPOSE THE OPTIMAL STRINGENCY MEASURE FOR A GIVEN COUNTRY AT A GIVEN TIME (THE PRESENT DAY / THE MOST RECENT DAY)
 
 ```{r defining variables}
 
