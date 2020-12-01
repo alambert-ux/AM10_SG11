@@ -3,24 +3,18 @@
 
 **Dataset - COVID-19 Mortality Risk, Our World in Data**
 
-(mortality data download)
-https://ourworldindata.org/mortality-risk-covid?country=~GBR
+*We employ 3 datasets in our analyses, each of which we cleaned individually, before combining them into a single data frame filtered only to European cases, covid_europe*
 
-(mortality data github repo)
-https://github.com/owid/covid-19-data/tree/master/public/data
+Big dataset -> owid-covid-data
+https://covid.ourworldindata.org/data/owid-covid-data.csv
 
-(mortality source data)
-https://ourworldindata.org/coronavirus-source-data
+hospital data-> data
+https://www.ecdc.europa.eu/en/publications-data/download-data-hospital-and-icu-admission-rates-and-current-occupancy-covid-19
 
-(social measures data download)
-https://www.who.int/emergencies/diseases/novel-coronavirus-2019/phsm
+testing data -> covid-testing-all-observations
+https://github.com/owid/covid-19-data/blob/master/public/data/testing/covid-testing-all-observations.csv
 
-(alternative data source 1) - EU Database
-https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data
-
-(alternative data source 2) - WHO Database
-https://www.who.int/tb/country/data/download/en/
-
+the last one you need to open. then right click and choose save as csv
 
 **The Worldwide Development of the COVID-19 Pandemic**
 
