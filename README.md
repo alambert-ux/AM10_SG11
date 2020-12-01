@@ -5,16 +5,16 @@
 
 This study asks the exploratory question "What have European governments done to mitigate the spread of COVID-19?", before asking the more pressing follow-up: "How successful have these measures been at limiting cases and fatalities, and what be learned from both the greatest successes and failures?". 
 
-Employing a breadth of visual and statistical techniques, including spatial mapping, time-series analysis, and linear regression, we compare the success of European governments in containing the fall-out from the global COVID-19 pandemic. 
+Employing a breadth of visual and statistical techniques, including spatial mapping, time-series analysis, and linear regression, we compare the success of European governments in containing the fall-out from the global COVID-19 pandemic.   
 
-Specifically, we seek to provide answers to the questions: 
+Specifically, we seek to provide answers to the questions:   
 
-i.      Where COVID-19 response strategies functioned as expected?;
-ii.	    What mitigation strategies have been most effective at combatting the virus?;
-iii.	  Which factors are most important in determining the success of mitigation strategies and;
-iv.     How does the predicted efficacy of mitigation strategies vary between countries?
+i.      Where COVID-19 response strategies functioned as expected?;  
+ii.	    What mitigation strategies have been most effective at combatting the virus?;  
+iii.	  Which factors are most important in determining the success of mitigation strategies and; 
+iv.     How does the predicted efficacy of mitigation strategies vary between countries?   
 
-We conclude that, though the efficacy of certain measures is highly domain-specific, stringent, hard and fast measures almost exclusively predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future. 
+We conclude that, though the efficacy of certain measures is highly domain-specific, stringent, hard and fast measures almost exclusively predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future.   
 
 ### Datasets
 
@@ -36,16 +36,18 @@ the last one you need to open. then right click and choose save as csv
 **OBJECTIVE 1** **Plots 1 & 2** Visualise the Current State of the COVID-19 Pandemic in Europe  
 
 *Outcomes:*                     Two Spatial Maps, Demonstrating Current Normalised Cases and Deaths Across Europe  
-*Insights:*                     An understanding of how different European regions have experienced the crisis differently, allowing selection of key cases  
+*Insights:*                     An understanding of how different European regions have experienced the crisis differently, allowing selection of key cases    
 
 **OBJECTIVE 2** **Plot 3**      Compare How Key European Countries Have Experienced the Pandemic in Terms of Cases and Deaths, and the Measures they Have Taken  
 
 *Outcomes:*                     Time Series Analyses Illustrating the Relationship between Stringency of Government Measures and subsequent cases/deaths  
 *Insights:*                     Identification of countries where response strategies did & did not **i) Function as Expected**, and selection of interesting cases  
+
 **OBJECTIVE 3** **Plot 4**      Deep-Dive into Specific, Characteristically Distinct Government Responses to the Pandemic   
 
 *Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3  
 *Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing  
+
 
 **OBJECTIVE 4** **Plot 5**      Understand the empirical relationship between certain factors and COVID-19 cases to make prescriptive recommendations  
 
