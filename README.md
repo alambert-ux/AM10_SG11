@@ -10,12 +10,13 @@ Employing a breadth of visual and statistical techniques, including spatial mapp
 Specifically, we seek to provide answers to the questions: 
 
 i.      Where COVID-19 response strategies functioned as expected?;
-ii.	What mitigation strategies have been most effective at combatting the virus?; and
-iii.	Which factors are most important in determining the success of mitigation strategies and how does this vary between countries?
+ii.	    What mitigation strategies have been most effective at combatting the virus?;
+iii.	  Which factors are most important in determining the success of mitigation strategies and;
+iv.     How does the predicted efficacy of mitigation strategies vary between countries?
 
 We conclude that, though the efficacy of certain measures is highly domain-specific, stringent, hard and fast measures almost exclusively predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future. 
 
-## Datasets
+### Datasets
 
 *We employ 3 datasets in our analyses, each of which we cleaned individually, before combining them into a single data frame filtered only to European cases, covid_europe*
 
@@ -30,7 +31,7 @@ https://github.com/owid/covid-19-data/blob/master/public/data/testing/covid-test
 
 the last one you need to open. then right click and choose save as csv
 
-# Evaluating European Governments' COVID-19 Response Strategies
+### Evaluating European Governments' COVID-19 Response Strategies
 
 **OBJECTIVE 1** **Plots 1 & 2** Visualise the Current State of the COVID-19 Pandemic in Europe
 
@@ -42,16 +43,16 @@ the last one you need to open. then right click and choose save as csv
 *Outcomes:*                     Time Series Analyses Illustrating the Relationship between Stringency of Government Measures and subsequent cases/deaths
 *Insights:*                     Identification of countries where response strategies did & did not **i) Function as Expected**, and selection of interesting cases
 
-**OBJECTIVE 3** **Plot 4**      Deep-Dives into Specific, Characteristically Distinct Government Responses to the Pandemic 
+**OBJECTIVE 3** **Plot 4**      Deep-Dive into Specific, Characteristically Distinct Government Responses to the Pandemic 
 
 *Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3
 *Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing
 
-**OBJECTIVE 4** **Plot 5**      Deep-Dives into Specific, Characteristically Distinct Government Responses to the Pandemic 
+**OBJECTIVE 4** **Plot 5**      Understand the empirical relationship between certain factors and COVID-19 cases to make prescriptive recommendations
 
-*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3
-*Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing
-
-
-## Conclusions
-
+*Outcomes:*                     Ordinary Least Squares (OLS) Linear Regression Model Which Provides Both Factor Coefficient Estimates and Ranks Factor Importance 
+*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating:
+                                **iii) which factors are most important in determining success of mitigation strategies** and 
+                                **iv) how the predicted efficacy of mitigation strategies vary between countries**
+                                
+                           
