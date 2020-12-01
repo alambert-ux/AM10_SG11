@@ -9,10 +9,13 @@ Employing a breadth of visual and statistical techniques, including spatial mapp
 
 Specifically, we seek to provide answers to the questions:   
 
-i.      Where COVID-19 response strategies functioned as expected?;  
-ii.	    What mitigation strategies have been most effective at combatting the virus?;  
-iii.	  Which factors are most important in determining the success of mitigation strategies and; 
-iv.     How does the predicted efficacy of mitigation strategies vary between countries?   
+**i.      Where COVID-19 response strategies functioned as expected?;**  
+
+**ii.	    What mitigation strategies have been most effective at combatting the virus?;  **
+
+**iii.	  Which factors are most important in determining the success of mitigation strategies and;   **
+
+**iv.     How does the predicted efficacy of mitigation strategies vary between countries?  **  
 
 We conclude that, though the efficacy of certain measures is highly domain-specific, stringent, hard and fast measures almost exclusively predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future.   
 
