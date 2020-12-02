@@ -719,8 +719,6 @@ IT_1wave /IT_2wave + plot_annotation(
   caption = 'Source:https://owid.data')
 ```
 
-### Italy
-
 First Lockdown
 
 - Initial local lockdown in ten municipalities of the province of Lodi in Lombardy and one in the province of Padua in Veneto from 21.02.2020.

@@ -1,43 +1,60 @@
-# STUDY GROUP 11, AM10 PROJECT PROPOSAL
-*Data Visualisation and Story Telling Final Group Project (Study Group 11)*
+# "No Need to Panic, It's All Under Control..." 
+## A Visual Critique of European Government's COVID-19 Response Strategies
 
-**Dataset - COVID-19 Mortality Risk, Our World in Data**
+**Data Visualisation and Story Telling Final Group Project (Study Group 11)**
 
-(mortality data download)
-https://ourworldindata.org/mortality-risk-covid?country=~GBR
+This study asks the exploratory question "What have European governments done to mitigate the spread of COVID-19?", before asking the more pressing follow-up: "How successful have these measures been at limiting cases and fatalities, and what be learned from both the greatest successes and failures?". 
 
-(mortality data github repo)
-https://github.com/owid/covid-19-data/tree/master/public/data
+Employing a breadth of visual and statistical techniques, including spatial mapping, time-series analysis, and linear regression, we compare the success of European governments in containing the fall-out from the global COVID-19 pandemic.   
 
-(mortality source data)
-https://ourworldindata.org/coronavirus-source-data
+Specifically, we seek to provide answers to the questions:   
 
-(social measures data download)
-https://www.who.int/emergencies/diseases/novel-coronavirus-2019/phsm
+**i.      Where COVID-19 response strategies functioned as expected?;**  
 
-(alternative data source 1) - EU Database
-https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data
+**ii.	    What mitigation strategies have been most effective at combatting the virus?;**
 
-(alternative data source 2) - WHO Database
-https://www.who.int/tb/country/data/download/en/
+**iii.	  Which factors are most important in determining the success of mitigation strategies and;**   
+
+**iv.     How does the predicted efficacy of mitigation strategies vary between countries?**     
+
+We conclude that, though the efficacy of certain measures is highly domain-specific, stringent, hard and fast measures almost exclusively predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future.   
+
+### Datasets
+
+*We employ 3 datasets in our analyses, each of which we cleaned individually, before combining them into a single data frame filtered only to European cases, covid_europe*
+
+Big dataset -> owid-covid-data   
+https://covid.ourworldindata.org/data/owid-covid-data.csv
+
+hospital data-> data  
+https://www.ecdc.europa.eu/en/publications-data/download-data-hospital-and-icu-admission-rates-and-current-occupancy-covid-19
+
+testing data -> covid-testing-all-observations  
+https://github.com/owid/covid-19-data/blob/master/public/data/testing/covid-testing-all-observations.csv
+
+the last one you need to open. then right click and choose save as csv
+
+### Evaluating European Governments' COVID-19 Response Strategies
+
+**OBJECTIVE 1** **Plots 1 & 2** Visualise the Current State of the COVID-19 Pandemic in Europe  
+
+*Outcomes:*                     Two Spatial Maps, Demonstrating Current Normalised Cases and Deaths Across Europe  
+*Insights:*                     An understanding of how different European regions have experienced the crisis differently, allowing selection of key cases    
+
+**OBJECTIVE 2** **Plot 3**      Compare How Key European Countries Have Experienced the Pandemic in Terms of Cases and Deaths, and the Measures they Have Taken  
+
+*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Stringency of Government Measures and subsequent cases/deaths  
+*Insights:*                     Identification of countries where response strategies did & did not **i) Function as Expected**, and selection of interesting cases  
+
+**OBJECTIVE 3** **Plot 4**      Deep-Dive into Specific, Characteristically Distinct Government Responses to the Pandemic   
+
+*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3  
+*Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing  
 
 
-**The Worldwide Development of the COVID-19 Pandemic**
+**OBJECTIVE 4** **Plot 5**      Understand the empirical relationship between certain factors and COVID-19 cases to make prescriptive recommendations  
 
-*OBJECTIVE 1*     Visualise the Spread of the Virus in Terms of Mortality
-Outcomes:       time series + mapping (geospatial visualisation)
-
-*OBJECTIVE 2*     Geographic Heterogeneity in the Virus in Terms of Mortality
-Outcomes:       static maps + regional heterogeneity (e.g. showing death/infection rate by age, across geographies)
-
-*OBJECTIVE 3*     Mortality Outcomes in key regions/geographies (the temporal evolution of the virus)
-Outcomes:       time series with specific national policy events
-
-**Visualisation Ideas / Checklist**
-
-1. Time Series Plot
-2. Parallel Sets Plot
-3. Mapping (static and interactive / dynamic / time series)
-
-
-        
+*Outcomes:*                     Ordinary Least Squares (OLS) Linear Regression Model Which Provides Both Factor Coefficient Estimates and Ranks Factor Importance   
+*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating: **iii) which factors are most                                         important in determining success of mitigation strategies** and **iv) how the predicted efficacy of mitigation strategies vary                                        between countries**
+                                
+                           
