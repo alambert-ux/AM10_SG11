@@ -134,7 +134,7 @@ covid_data_clean <- covid_data_clean %>%
   filter(!is.na(continent))
 ```
 
-For the `gdp_per_capita` column, there are 28 countries/territories with missing values. And they are missing across all the days. We impute some of them, with data from world bank if it is availble, and leave the rest in NAs
+For the `gdp_per_capita` column, there are 28 countries/territories with missing values. And they are missing across all the days. We impute some of them, with data from world bank if it is available, and leave the rest in NAs
 
 ```{r dataset1 clean gdp_per_capita}
 # check if the gdp_per_capita of countries are NA all the time 
@@ -867,6 +867,15 @@ summary(model1_lm)
 # we can check variable importance as well
 importance <- caret::varImp(model1_lm, scale=TRUE)
 plot(importance)
+
+```
+
+```{r}
+
+covid_europe %>% 
+  group_by(location) %>% 
+  filter(location %in% c("Denmark","Finland","France","Germany","Greece","Iceland","Italy","Netherlands","Norway","Poland","Slovakia","Slovenia","Spain","Sweden","Switzerland","United Kingdom")) %>% 
+  ggplot(aes(y=stringency_index, color=location))+geom_boxplot()
 
 ```
 
