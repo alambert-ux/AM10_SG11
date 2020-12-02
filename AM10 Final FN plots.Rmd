@@ -418,7 +418,7 @@ map_latest <- euro_joined %>%
   ggplot() +
   geom_sf(aes(fill = new_cases_per_million)) +
   geom_sf_text(data = euro_joined[euro_joined$subunit %in% country_list_lastest,], aes(label = admin),size = 2, fontface = "bold",color = 'grey10') +
-  labs(title = "XXX",subtitle = 'Most Recent(2020/11/24) New Cases per Million in Europe',
+  labs(title = "XXX",subtitle = 'Most Recent (24/11/2020) New Cases per Million in Europe',
        x='',y='' #,caption = 'Source:https://owid.data'
        ) +
   scale_fill_gradientn(name = NULL,colours = scale1,labels = c(0,'0.5K','1K','1.5K','2K')) +
@@ -436,7 +436,7 @@ map_total <- euro_joined %>%
   ggplot() +
   geom_sf(aes(fill = total_cases_per_million)) +
   geom_sf_text(data = euro_joined[euro_joined$subunit %in% country_list,], aes(label = admin), size = 2, fontface = "bold",color = 'grey10') +
-  labs(title = 'XXXX',subtitle = "Total Cases per Million in Europe", x='',y=''
+  labs(title = 'XXXX',subtitle = "Most Recent (24/11/2020) Total Cases per Million in Europe", x='',y=''
        # caption = 'Source:https://owid.data'
        ) +
   scale_fill_gradientn(name = NULL,colours = scale2,labels = c(0,'20K','40K','60K','80K')) +
@@ -1017,7 +1017,7 @@ summary(model1_lm)
 
 ```
 
-```{r LR Model Variable Importance}
+```{r LR Model Variable Importance,fig.height = 2,fig.width = 3}
 
 # we can check variable importance as well
 
@@ -1036,7 +1036,7 @@ impt[5,3] <- 'Stringency Index, for Belarus'
 impt[6,3] <- 'Stringency Index, for Spain'
 impt[7,3] <- 'Stringency Index, for Bosnia and Herzegovina'
 impt[8,3] <- 'Stringency Index, for Czech Republic'
-impt[9,3] <- 'Get 65 Older'
+impt[9,3] <- 'Proportion 65+'
 impt[10,3] <- 'Stringency Index, for Bulgaria'
 impt[11,3] <- 'Stringency Index, for Switzerland'
 impt[12,3] <- 'Stringency Index, for Portugal'
