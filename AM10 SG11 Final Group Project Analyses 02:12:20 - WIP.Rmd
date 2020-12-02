@@ -775,7 +775,7 @@ wave1 <- ggarrange(uk_1wave, poland_1wave,italy_1wave, sweden_1wave, france_1wav
                    legend= FALSE)
 
 title1 <- expression(atop(bold("Hard and Fast Lockdowns Work, Gradual Responses Don't"), # title
-                          scriptstyle("Daily Cases During the First Wave across UK, Poland, Italy, Sweden, France and Denmark"))) # subtitle
+                          scriptstyle("Daily Cases During the First Wave across the UK, Poland, Italy, Sweden, France and Denmark"))) # subtitle
 
 annotate_figure(wave1,
                top=text_grob(title1,size = 17),
@@ -964,7 +964,7 @@ wave2 <- ggarrange(uk_2wave, poland_2wave,italy_2wave, sweden_2wave, france_2wav
                    legend= FALSE)
 
 title2 <- expression(atop(bold("Lesson Learnt? Countries who Imposed Restrictions Sooner Succeeded in Slowing the Second Wave"), # title
-                          scriptstyle("Daily Cases in Second Wave across UK, Poland, Italy, Sweden, France and Denmark"))) # subtitle
+                          scriptstyle("Daily Cases During the Second Wave across the UK, Poland, Italy, Sweden, France and Denmark"))) # subtitle
 
 annotate_figure(wave2,
                top=text_grob(title2,size = 17),
