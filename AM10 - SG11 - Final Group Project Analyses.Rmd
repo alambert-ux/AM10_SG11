@@ -82,25 +82,26 @@ library(rnaturalearth)
 
 # Load Data
 
-```{r loading_data, message=FALSE,results='hide',warning=FALSE}
+```{r loading_data}
 #loading first data set, incl. GDP
-owid_covid_data <- read_csv(here::here("owid-covid-data.csv")) 
+owid_covid_data <- read_csv("owid-covid-data.csv") 
 #cleaning the names
 covid_data <- owid_covid_data %>% 
   clean_names()
 
 #loading second data set: testing data
-covid_testing_all_observations <- read_csv(here::here("covid-testing-all-observations.csv"))
+covid_testing_all_observations <- read_csv("covid-testing-all-observations.csv")
 #cleaning the names
 covid_testing<- covid_testing_all_observations %>% 
   clean_names()
 
 #loading third data set: number of hospitalized patients
 
-hospital_data_original <- vroom(here::here("data.csv")) 
+hospital_data_original <- vroom("data.csv")
 #cleaning the names
 hospital_data <- hospital_data_original %>% 
   clean_names()
+
 ```
 
 # Clean data
