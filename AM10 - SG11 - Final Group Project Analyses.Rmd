@@ -10,7 +10,6 @@ toc: yes
 toc_float: yes
 code_folding: show
 
-
 ---
 
 ```{r, setup, include=FALSE}
