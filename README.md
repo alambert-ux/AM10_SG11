@@ -17,7 +17,7 @@ Specifically, we seek to provide answers to the questions:
 
 **iv.     HOW does the theorised efficacy of mitigation strategies vary between countries?**     
 
-We conclude that, though the efficacy of certain measures is highly domain-specific, stringent, stable and fast measures clearly predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future.   
+We conclude that, though the efficacy of certain measures is highly domain-specific, **stringent**, **stable** and **rapidly enacted (fast)** measures clearly predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future.   
 
 ### Datasets
 
@@ -38,23 +38,23 @@ the last one you need to open. then right click and choose save as csv
 
 **OBJECTIVE 1** **Plots 1 & 2** Visualise the Current State of the COVID-19 Pandemic in Europe  
 
-*Outcomes:*                     Two Spatial Maps, Demonstrating Current Normalised Cases and Deaths Across Europe  
-*Insights:*                     An understanding of how different European regions have experienced the crisis differently, allowing selection of key cases    
+*Outcomes:*                     Two Spatial Maps, Demonstrating Current Normalised Cases and Deaths Across Europe.  
+*Insights:*                     An understanding of how different European regions have experienced the crisis differently, allowing selection of key cases.    
 
 **OBJECTIVE 2** **Plots 3 & 4** Compare How Key European Countries Have Experienced the Pandemic in Terms of Cases and Deaths, and the Measures they Have Taken  
 
-*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Stringency of Government Measures and subsequent cases/deaths  
-*Insights:*                     Identification of countries where response strategies did & did not **i) Function as Expected**, and selection of interesting cases  
+*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Stringency of Government Measures and subsequent cases/deaths.  
+*Insights:*                     Identification of countries where response strategies were and were not **i) Successful**, and selection of interesting cases.  
 
-**OBJECTIVE 3** **Plot 5**      Deep-Dive into Specific, Characteristically Distinct Government Responses to the Pandemic   
+**OBJECTIVE 3** **Plot 5**      Deep-Dive into Specific, Characteristically Distinct Government Responses to the Pandemic, selected using plots 3 and 4   
 
-*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3  
-*Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing  
+*Outcomes:*                     Time Series Analyses Illustrating the Relationship between Cases, Tests, and Government Measures for Selected Cases from Plot 3.  
+*Insights:*                     Deeper understanding of the type of policies underlying the stringency index, and their relative **ii) efficacy** and timing.  
 
 
-**OBJECTIVE 4** **Plot 6**      Understand the empirical relationship between certain factors and COVID-19 cases to make prescriptive recommendations  
+**OBJECTIVE 4** **Plot 6**      Empirically ratify hypothesised relationships between certain factors and COVID-19 cases drawn from Plots 1-5,rank these factors by importance, and evaluate country-level heterogeneity   
 
-*Outcomes:*                     Ordinary Least Squares (OLS) Linear Regression Model Which Provides Both Factor Coefficient Estimates and Ranks Factor Importance   
-*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating: **iii) which factors are most                                         important in determining success of mitigation strategies** and **iv) how the predicted efficacy of mitigation strategies vary                                        between countries**
+*Outcomes:*                     Ordinary Least Squares (OLS) Linear Regression Model Which Provides Both Factor Coefficient Estimates and Ranks Factor Importance.   
+*Insights:*                     Empirical relationships between government stringency (response) and outcomes, demonstrating: **iii) which factors are most                                         important in determining success of mitigation strategies** and **iv) how the theorised efficacy of mitigation strategies vary                                        between countries**.
                                 
                            
