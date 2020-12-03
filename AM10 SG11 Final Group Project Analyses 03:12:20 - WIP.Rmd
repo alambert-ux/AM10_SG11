@@ -359,7 +359,9 @@ Adjustments made in the following two plots:
 
 We begin by setting the scene of the 'state of COVID=19' in Europe, before exploring the relationship between government measures and deaths/cases, and delving into 6 distinct country case studies to understand how specific public policy decisions have translated into COVID-19 outcomes. Finally, we build a predictive model using OLS Regression.
 
-## Plots 1 and 2
+## Plot 1
+
+**Designed to demonstrate the current state of the COVID-19 Pandemic in Europe and inform further avenues of enquiry**
 
 ```{r top 5 sum new_cases countries,message=FALSE,results='hide',warning=FALSE}
 top_5_country <- covid_europe %>% 
@@ -429,8 +431,9 @@ map_total
 
 ```
 
+## Plot 2
 
-
+**Designed to Demonstrate how the First and Second Waves Hit Different Countries Differently - to Inform Our Case-Study Selection**
 
 ``` {r lockdown_maps,message=FALSE,results='hide',warning=FALSE}
 
@@ -507,10 +510,11 @@ map_lockdowns
 
 ```
 
+## Plot 3: Investigating the relationship between stringency measures and cases for prominent European countries
 
+**Designed in order to demonstrate, temporally, the relationship between government stringency measures and cases**
 
-## Plot 3: Investigating the relationship between stringency measures and cases/deaths for prominent European countries
-```{r stringency_graphs,fig.height = 3,fig.width = 6,message=FALSE,results='hide',warning=FALSE}
+```{r stringency_cases,fig.height = 3,fig.width = 6,message=FALSE,results='hide',warning=FALSE}
 #(1) New Cases Smoothed, Per Million
 
 coeff=12
@@ -539,6 +543,13 @@ cases_stringency <- covid_europe %>%
  
 cases_stringency
 
+```
+
+## Plot 4: Investigating the relationship between stringency measures and deaths for prominent European countries
+
+**Designed in order to demonstrate, temporally, the relationship between government stringency measures and deaths, since we speculated cases may be misleading as an indicator of government response efficacy in the first wave, due to lack of testing**
+
+```{r stringency_deaths,fig.height = 3,fig.width = 6,message=FALSE,results='hide',warning=FALSE}
 # (2) New Deaths Smoothed, Per Million
 
 coeff=5
@@ -572,6 +583,13 @@ death_stringency <- covid_europe %>%
 
 death_stringency
 ```
+
+## Plot 5a (Wave 1): Deep-Dive into 6 Specific Case Studies Representing Characteristically Distinct Government Responses to the Pandemic
+
+**Again, we designed these visualisations as time-series, since Plots 3 and 4 demonstrated to us that timing, as well as stringency, seemed to be strongly related to outcomes in terms of cases and deaths**
+
+**Given that we also observe substantial differences in the stories told by Cases and Deaths in the first wave, in plots 3 and 4, we also thought it important to include COVID-19 testing data, to ensure that though we were evaluating case evolution, we were weary of the biases associated with different levels of national testing**
+
 ```{r daily_test_change,message=FALSE,results='hide',warning=FALSE}
 covid_europe <- covid_europe %>% 
   mutate(x7_day_daily_test_change_per_million = x7_day_daily_test_change_per_thousand*1000)
@@ -643,7 +661,6 @@ poland_1wave <- covid_europe %>%
 
 ```
 
-
 ```{r italy_1wave,message=FALSE,results='hide',warning=FALSE}
 italy_1wave <- covid_europe %>% 
   # to create first wave, we filter the month
@@ -683,7 +700,6 @@ italy_1wave <- covid_europe %>%
                      sec.axis = sec_axis(~.*40,labels = scales::comma)) 
   
 ```
-
 
 ```{r sweden_1wave,message=FALSE,results='hide',warning=FALSE}
 sweden_1wave <- covid_europe %>% 
@@ -739,7 +755,6 @@ france_1wave <- covid_europe %>%
 
 ```
 
-
 ```{r denmark_1wave,message=FALSE,results='hide',warning=FALSE}
 denmark_1wave <- covid_europe %>% 
   filter((location == 'Denmark') & (month(date) < 9)) %>% 
@@ -765,7 +780,6 @@ denmark_1wave <- covid_europe %>%
   scale_y_continuous(limits = c(0,160),breaks = c(0,40,80,120,160),labels = scales::comma ,sec.axis = sec_axis(~.*40,labels = scales::comma)) 
 ```
 
-
 ```{r wave1_countries,fig.height= 4,fig.width=7,message=FALSE,results='hide',warning=FALSE}
 wave1 <- ggarrange(uk_1wave, poland_1wave,italy_1wave, sweden_1wave, france_1wave, denmark_1wave,
                    ncol = 2, 
@@ -784,9 +798,9 @@ annotate_figure(wave1,
 
 ```
 
+## Plot 5b (Wave 2): Deep-Dive into 6 Specific Case Studies Representing Characteristically Distinct Government Responses to the Pandemic
 
-
-
+**Given that we wanted to evaluate government's strategies holistically, we felt separating these deep-dive time-series into first and second waves, to allow identification both of how countries' strategies evolved and direct comparison of their strategies in each wave, was optimal**
 
 ```{r uk_2wave,message=FALSE,results='hide',warning=FALSE}
 uk_2wave  <- covid_europe %>% 
@@ -974,7 +988,9 @@ annotate_figure(wave2,
 
 ```
 
-# Plot 5 - RUNNING A STATISTICAL MODEL EVALUATING THE RELATIONSHIP BETWEEN STRINGENCY AND CASES/DEATHS IN ORDER TO PROPOSE THE OPTIMAL STRINGENCY MEASURE FOR A GIVEN COUNTRY AT A GIVEN TIME (THE PRESENT DAY / THE MOST RECENT DAY)
+## Plot 6 - Visualising Variable Importance in an OLS Linear Regression Model Predicting Cases per Million
+
+**Since all our analyses so far (Plots 1-5) required us to draw non-empirical insights, we thought that it was crucial to ratify our insights with a statistical model**
 
 ```{r defining variables,message=FALSE,results='hide',warning=FALSE}
 
@@ -991,6 +1007,8 @@ covid_europe_lm <- covid_europe %>%
   mutate(days_elapsed = as.numeric(date.x-date.y))
 
 ```
+
+While Plots 1-4 are relatively self-explanatory, the Linear Regression used to create Plot 5 was tuned iteratively, selecting predictors and interactions which were both logically valid and resulted in an increase in Adjusted R2. 
 
 ```{r define control variable,message=FALSE,results='hide',warning=FALSE}
 #Define control variables
@@ -1013,6 +1031,14 @@ model1_lm<-train(
 summary(model1_lm)
 
 ```
+
+The resulting model equation is as follows:
+
+Total Cases Per Million = 0.0064 – 0.0451*Percentage Aged 65+ – 0.783*Stringency Index + 0.972*(Stringency Index*Days Elapsed) + B4*(Stringency Index*Location), where B4 is a coefficient representing the relationship between the stringency index and total cases per million, by location. 
+
+**Since coefficients alone, especially for continuous-continuous interaction terms are not readily interpretable, we decide to plot relative factor importance instead - allowing us to evaluate whether our insights regarding SPEED of response, SEVERITY of stringency measures, and STABILITY of measures, are valid**
+
+**Further, this model allowed us to evaluate country-level heterogeneity in the efficacy of stringency measures, and the relative importance of stringency as a COVID-19 mitigation strategy across European countries**
 
 ```{r LR Model Variable Importance,fig.height = 2,fig.width = 4,message=FALSE,results='hide',warning=FALSE}
 
