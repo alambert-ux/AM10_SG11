@@ -82,25 +82,26 @@ library(rnaturalearth)
 
 # Load Data
 
-```{r loading_data, message=FALSE,results='hide',warning=FALSE}
+```{r loading_data}
 #loading first data set, incl. GDP
-owid_covid_data <- read_csv(here::here("owid-covid-data.csv")) 
+owid_covid_data <- read_csv("owid-covid-data.csv") 
 #cleaning the names
 covid_data <- owid_covid_data %>% 
   clean_names()
 
 #loading second data set: testing data
-covid_testing_all_observations <- read_csv(here::here("covid-testing-all-observations.csv"))
+covid_testing_all_observations <- read_csv("covid-testing-all-observations.csv")
 #cleaning the names
 covid_testing<- covid_testing_all_observations %>% 
   clean_names()
 
 #loading third data set: number of hospitalized patients
 
-hospital_data_original <- vroom(here::here("data.csv")) 
+hospital_data_original <- vroom("data.csv")
 #cleaning the names
 hospital_data <- hospital_data_original %>% 
   clean_names()
+
 ```
 
 # Clean data
@@ -359,9 +360,9 @@ Adjustments made in the following two plots:
 
 We begin by setting the scene of the 'state of COVID=19' in Europe, before exploring the relationship between government measures and deaths/cases, and delving into 6 distinct country case studies to understand how specific public policy decisions have translated into COVID-19 outcomes. Finally, we build a predictive model using OLS Regression.
 
-## Plot 1
+## Plot 1 - Map of COVID-19 Cases Across Europe
 
-**Designed to demonstrate the current state of the COVID-19 Pandemic in Europe and inform further avenues of enquiry**
+**Designed to demonstrate the current state of the COVID-19 Pandemic in Europe and inform further avenues of inquiry**
 
 ```{r top 5 sum new_cases countries,message=FALSE,results='hide',warning=FALSE}
 top_5_country <- covid_europe %>% 
@@ -431,7 +432,7 @@ map_total
 
 ```
 
-## Plot 2
+## Plot 2 - Map of COVID-19 Cases Across Europe, by Wave
 
 **Designed to Demonstrate how the First and Second Waves Hit Different Countries Differently - to Inform Our Case-Study Selection**
 
@@ -510,7 +511,7 @@ map_lockdowns
 
 ```
 
-## Plot 3: Investigating the relationship between stringency measures and cases for prominent European countries
+## Plot 3 - Investigating the relationship between stringency measures and cases for prominent European countries
 
 **Designed in order to demonstrate, temporally, the relationship between government stringency measures and cases**
 
