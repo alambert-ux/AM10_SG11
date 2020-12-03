@@ -17,7 +17,7 @@ Specifically, we seek to provide answers to the questions:
 
 **iv.     HOW does the theorised efficacy of mitigation strategies vary between countries?**     
 
-We conclude that, though the efficacy of certain measures is highly domain-specific, **stringent**, **stable** and **rapidly enacted (fast)** measures clearly predict how well national governments handled the crisis, providing valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future.   
+We conclude that, though the efficacy of certain measures is highly country-specific, **stringent**, **stable** and **rapidly enacted (fast)** measures clearly predict how well national governments handled the crisis. Specifically, we find that the **timing** of government responses relative to the first nationwide outbreak (the first reported case) is the most important factor in determining their success in keeping cases down. This provides valuable lessons for governments as they battle the second and third waves of the pandemic and seek to overcome pandemics in future.   
 
 ### Datasets
 
