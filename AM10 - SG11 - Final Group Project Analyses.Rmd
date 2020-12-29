@@ -838,7 +838,7 @@ uk_2wave  <- covid_europe %>%
 poland_2wave<- covid_europe %>% 
   filter(location == 'Poland' & month(date) >= 9) %>% 
   ggplot(aes(x = date)) +
-  geom_rect(aes(xmin = as.Date('2020-10-24'), xmax = as.Date('2020-11-24'), 
+  geom_rect(aes(xmin = as.Date('2020-11-07'), xmax = as.Date('2020-11-21'), 
                 ymin = -Inf, ymax=Inf), fill = 'grey90') +
   
   geom_line( aes(y = new_cases_smoothed_per_million, colour = "Daily Cases")) +
@@ -846,12 +846,12 @@ poland_2wave<- covid_europe %>%
   scale_color_manual(values=c("blue", "orange")) +
 
   #new restrictions
-  geom_vline(xintercept = as.Date('2020-10-09'), color = 'darkgrey', linetype = 'dashed')+ #add dashed line
+  geom_vline(xintercept = as.Date('2020-10-24'), color = 'darkgrey', linetype = 'dashed')+ #add dashed line
   
   #2nd lockdown
-  geom_vline(xintercept = as.Date('2020-10-24'), color = 'darkgrey', linetype = 'dashed')+ 
-  geom_vline(xintercept = as.Date('2020-11-24'), color = 'darkgrey', linetype = 'dashed')+ 
-  annotate(geom="text", x = as.Date('2020-10-30'),y = 1000,label='Second\nLockdown', size = 3.5) +
+  geom_vline(xintercept = as.Date('2020-11-07'), color = 'darkgrey', linetype = 'dashed')+ 
+  geom_vline(xintercept = as.Date('2020-11-21'), color = 'darkgrey', linetype = 'dashed')+ 
+  annotate(geom="text", x = as.Date('2020-11-14'),y = 1000,label='Second\nLockdown', size = 3.5) +
   annotate(geom="text", x = as.Date('2020-10-16'),y = 1000,label='New\nRestrictions', size = 3.5) +
   
   theme_fivethirtyeight() + 
@@ -867,9 +867,9 @@ poland_2wave<- covid_europe %>%
 
 ```{r italy_2wave,message=FALSE,results='hide',warning=FALSE}
 italy_2wave<- covid_europe %>% 
-  filter(location == 'Poland' & month(date) >= 9) %>% 
+  filter(location == 'Italy' & month(date) >= 9) %>% 
   ggplot(aes(x = date)) +
-  geom_rect(aes(xmin = as.Date('2020-10-24'), xmax = as.Date('2020-11-24'), 
+  geom_rect(aes(xmin = as.Date('2020-11-06'), xmax = as.Date('2020-11-22'), 
                 ymin = -Inf, ymax=Inf), fill = 'grey90') +
   
   geom_line( aes(y = new_cases_smoothed_per_million, colour = "Daily Cases")) +
@@ -877,12 +877,12 @@ italy_2wave<- covid_europe %>%
   scale_color_manual(values=c("blue", "orange")) +
 
   #new restrictions
-  geom_vline(xintercept = as.Date('2020-10-09'), color = 'darkgrey', linetype = 'dashed')+ #add dashed line
+  geom_vline(xintercept = as.Date('2020-10-25'), color = 'darkgrey', linetype = 'dashed')+ #add dashed line
   
   #2nd lockdown
-  geom_vline(xintercept = as.Date('2020-10-24'), color = 'darkgrey', linetype = 'dashed')+ 
-  geom_vline(xintercept = as.Date('2020-11-24'), color = 'darkgrey', linetype = 'dashed')+ 
-  annotate(geom="text", x = as.Date('2020-10-30'),y = 1000,label='Second\nLockdown', size = 3.5) +
+  geom_vline(xintercept = as.Date('2020-11-06'), color = 'darkgrey', linetype = 'dashed')+ 
+  geom_vline(xintercept = as.Date('2020-11-22'), color = 'darkgrey', linetype = 'dashed')+ 
+  annotate(geom="text", x = as.Date('2020-11-13'),y = 1000,label='Second\nLockdown', size = 3.5) +
   annotate(geom="text", x = as.Date('2020-10-16'),y = 1000,label='New\nRestrictions', size = 3.5) +
   
   theme_fivethirtyeight() + 
