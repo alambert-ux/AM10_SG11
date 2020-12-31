@@ -77,6 +77,7 @@ library(ggpubr)
 library(ggplot2)
 library(sf)
 library(rnaturalearth)
+library(rgeos)
 
 ```
 
@@ -221,8 +222,8 @@ As we can observe there are two metrics: people tested and samples tested. Havin
 #average daily data per country and omit na's
 
 covid_testing_process1 <-covid_testing_process %>% 
-  group_by(date, iso_code) %>% 
-  summarise(cumulative_tests = mean(cumulative_total, na.rm = TRUE),
+  dplyr::group_by(date, iso_code) %>% 
+  dplyr::summarise(cumulative_tests = mean(cumulative_total, na.rm = TRUE),
             daily_tests = mean(daily_change_in_cumulative_total, na.rm = TRUE),
             cumulative_tests_per_thousand = mean(cumulative_total_per_thousand, na.rm = TRUE),
             x7_day_daily_test_change = mean(x7_day_smoothed_daily_change, na.rm = TRUE),

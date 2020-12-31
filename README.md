@@ -32,8 +32,6 @@ https://www.ecdc.europa.eu/en/publications-data/download-data-hospital-and-icu-a
 testing data -> covid-testing-all-observations  
 https://github.com/owid/covid-19-data/blob/master/public/data/testing/covid-testing-all-observations.csv
 
-the last one you need to open. then right click and choose save as csv
-
 ### Evaluating European Governments' COVID-19 Response Strategies
 
 **OBJECTIVE 1** **Plots 1 & 2** Visualise the Current State of the COVID-19 Pandemic in Europe  
